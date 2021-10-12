@@ -9,6 +9,7 @@ public class DrawingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_drawing);
+        DrawerView canvas = new DrawerView(this);
+        setContentView(canvas);
     }
 }
