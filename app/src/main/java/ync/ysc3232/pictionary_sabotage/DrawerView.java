@@ -1,56 +1,81 @@
 package ync.ysc3232.pictionary_sabotage;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 
-import android.text.Layout;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 
 public class DrawerView extends View {
 
-    public ViewGroup.LayoutParams params;
-    private Path draw_path = new Path();
-    private Paint brush = new Paint();
+    private Path draw_path;
+    private Paint brush;
+    private Paint canvas_paint;
+    private Canvas canvas;
+    private Bitmap canvas_bitmap;
+    private int paint_color = Color.BLACK;
+    private float brush_size;
 
-    public DrawerView(Context context) {
-        super(context);
+    private void init(){
+        brush_size = 8f;
 
+        draw_path = new Path();
+        brush = new Paint();
+        brush.setColor(paint_color);
         brush.setAntiAlias(true);
-        brush.setColor(Color.BLACK);
+        brush.setStrokeWidth(brush_size);
         brush.setStyle(Paint.Style.STROKE);
         brush.setStrokeJoin(Paint.Join.ROUND);
-        brush.setStrokeWidth(8f);
+        brush.setStrokeCap(Paint.Cap.ROUND);
 
-        params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        canvas_paint = new Paint(Paint.DITHER_FLAG);
+        canvas_bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+        canvas = new Canvas(canvas_bitmap);
+
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        float point_x = event.getX();
-        float point_y = event.getY();
-
-        switch (event.getAction()){
-            case MotionEvent.ACTION_DOWN:
-                draw_path.moveTo(point_x, point_y);
-                return true;
-            case MotionEvent.ACTION_MOVE:
-                draw_path.lineTo(point_x, point_y);
-                break;
-            default:
-                return false;
-
-        }
-        postInvalidate();
-        return false;
+    public DrawerView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
+        canvas.drawBitmap(canvas_bitmap, 0 , 0, canvas_paint);
         canvas.drawPath(draw_path, brush);
+    }
+
+//    @Override
+//    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+//        super.onSizeChanged(w, h, oldw, oldh);
+//    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float touch_x = event.getX();
+        float touch_y = event.getY();
+
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                draw_path.moveTo(touch_x, touch_y);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                draw_path.lineTo(touch_x, touch_y);
+                break;
+            case MotionEvent.ACTION_UP:
+                draw_path.lineTo(touch_x, touch_y);
+                canvas.drawPath(draw_path, brush);
+//                draw_path.reset();
+                break;
+            default:
+                return false;
+        }
+        invalidate();
+        return true;
     }
 }
