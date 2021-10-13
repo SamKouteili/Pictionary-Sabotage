@@ -16,7 +16,7 @@ public class DrawerView extends View {
     private Path draw_path;
     private Paint brush;
     private Paint canvas_paint;
-    private Canvas canvas;
+    private Canvas draw_canvas;
     private Bitmap canvas_bitmap;
     private int paint_color = Color.BLACK;
     private float brush_size;
@@ -34,8 +34,6 @@ public class DrawerView extends View {
         brush.setStrokeCap(Paint.Cap.ROUND);
 
         canvas_paint = new Paint(Paint.DITHER_FLAG);
-        canvas_bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
-        canvas = new Canvas(canvas_bitmap);
 
     }
 
@@ -50,10 +48,12 @@ public class DrawerView extends View {
         canvas.drawPath(draw_path, brush);
     }
 
-//    @Override
-//    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-//        super.onSizeChanged(w, h, oldw, oldh);
-//    }
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        canvas_bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        draw_canvas = new Canvas(canvas_bitmap);
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -69,8 +69,8 @@ public class DrawerView extends View {
                 break;
             case MotionEvent.ACTION_UP:
                 draw_path.lineTo(touch_x, touch_y);
-                canvas.drawPath(draw_path, brush);
-//                draw_path.reset();
+                draw_canvas.drawPath(draw_path, brush);
+                draw_path.reset();
                 break;
             default:
                 return false;
