@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "255164941980",
+    "project_id": "pictionary-sabotage",
+    "storage_bucket": "pictionary-sabotage.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:255164941980:android:f9b7faa2c5a9a9816fcf59",
+        "android_client_info": {
+          "package_name": "ync.ysc3232.pictionary_sabotage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "255164941980-lsnlurt7k9luupungs0has76dvqtmrq8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZ6EV9LJ6LHJZeYylOWkgak-l_XMx-9NM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "255164941980-lsnlurt7k9luupungs0has76dvqtmrq8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
