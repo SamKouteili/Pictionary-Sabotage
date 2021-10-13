@@ -34,12 +34,21 @@ public class DrawerView extends View {
         brush.setStrokeCap(Paint.Cap.ROUND);
 
         canvas_paint = new Paint(Paint.DITHER_FLAG);
-
     }
 
     public DrawerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
+    }
+
+    public void EraserMode(){
+        brush.setColor(Color.WHITE);
+        brush.setStrokeWidth(15f);
+    }
+
+    public void DrawingMode(){
+        brush.setColor(paint_color);
+        brush.setStrokeWidth(brush_size);
     }
 
     @Override

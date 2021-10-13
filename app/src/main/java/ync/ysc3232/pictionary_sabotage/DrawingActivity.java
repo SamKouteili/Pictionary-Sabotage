@@ -10,11 +10,14 @@ import android.view.MenuItem;
 public class DrawingActivity extends AppCompatActivity {
 
     private Toolbar bottom_toolbar;
+    private DrawerView drawer_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawing);
+
+        drawer_view = (DrawerView)findViewById(R.id.drawer_view);
 
         bottom_toolbar = (Toolbar) findViewById(R.id.toolbar_bottom);
         bottom_toolbar.inflateMenu(R.menu.menu_drawing);
@@ -30,7 +33,12 @@ public class DrawingActivity extends AppCompatActivity {
 
     private void handleDrawingIconTouched(int itemId){
         switch (itemId){
-
+            case R.id.action_erase:
+                drawer_view.EraserMode();
+                break;
+            case R.id.action_brush:
+                drawer_view.DrawingMode();
+                break;
         }
     }
 
