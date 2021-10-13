@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/selected" android:oneshot="false">
+    <item android:drawable="@drawable/giphy_0" android:duration="100" />
+    <item android:drawable="@drawable/giphy_1" android:duration="100" />
+    <item android:drawable="@drawable/giphy_2" android:duration="100" />
+    <item android:drawable="@drawable/giphy_3" android:duration="100" />
+    <item android:drawable="@drawable/giphy_4" android:duration="100" />
+    <item android:drawable="@drawable/giphy_5" android:duration="100" />
+    <item android:drawable="@drawable/giphy_6" android:duration="100" />
+    <item android:drawable="@drawable/giphy_7" android:duration="100" />
+    <item android:drawable="@drawable/giphy_8" android:duration="100" />
+    <item android:drawable="@drawable/giphy_9" android:duration="100" />
+    <item android:drawable="@drawable/giphy_10" android:duration="100" />
+    <item android:drawable="@drawable/giphy_11" android:duration="100" />
+    <item android:drawable="@drawable/giphy_12" android:duration="100" />
+    <item android:drawable="@drawable/giphy_13" android:duration="100" />
+    <item android:drawable="@drawable/giphy_14" android:duration="100" />
+    <item android:drawable="@drawable/giphy_15" android:duration="100" />
+    <item android:drawable="@drawable/giphy_16" android:duration="100" />
+    <item android:drawable="@drawable/giphy_17" android:duration="100" />
+    <item android:drawable="@drawable/giphy_18" android:duration="100" />
+    <item android:drawable="@drawable/giphy_19" android:duration="100" />
+    <item android:drawable="@drawable/giphy_20" android:duration="100" />
+    <item android:drawable="@drawable/giphy_21" android:duration="100" />
+    <item android:drawable="@drawable/giphy_22" android:duration="100" />
+    <item android:drawable="@drawable/giphy_23" android:duration="100" />
+    <item android:drawable="@drawable/giphy_24" android:duration="100" />
+    <item android:drawable="@drawable/giphy_25" android:duration="100" />
+    <item android:drawable="@drawable/giphy_26" android:duration="100" />
+</animation-list>
