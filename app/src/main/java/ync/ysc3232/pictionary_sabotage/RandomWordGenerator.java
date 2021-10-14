@@ -7,7 +7,12 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
+import java.sql.Array;
 import java.sql.Time;
+import java.util.List;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,9 +21,12 @@ public class RandomWordGenerator extends AppCompatActivity {
     Timer timer;
 
     private TextView countdownText;
+    private TextView randomWord;
     private CountDownTimer countDownTimer;
-    private long timeLeftInMilliseconds = 6000;
+    private long timeLeftInMilliseconds = 5000;
     private boolean timerRunning;
+
+    private String[] words = {"tree", "bench", "squirrel", "hat", "nose"};
 
 
     @Override
@@ -27,6 +35,15 @@ public class RandomWordGenerator extends AppCompatActivity {
         setContentView(R.layout.activity_random_word_generator);
 
         countdownText = findViewById(R.id.countdown_text);
+        randomWord = findViewById(R.id.randomWord);
+
+        //Generate a random word from the string array
+        //TODO: Create a database for words
+//        Random random = new Random();
+//        int x = random.nextInt(words.length);
+        int x = (int)(Math.random() * words.length + 1);
+        randomWord.setText(words[x]);
+
         startTimer();
     }
 
@@ -35,7 +52,7 @@ public class RandomWordGenerator extends AppCompatActivity {
             @Override
             public void onTick(long l) {
                 timeLeftInMilliseconds = l;
-                int seconds = (int) timeLeftInMilliseconds / 1000;
+                int seconds = (int) (timeLeftInMilliseconds + 1000) / 1000; //Start from 5, end in 1
 
                 //Update text
                 String updatedCountDownTest;
