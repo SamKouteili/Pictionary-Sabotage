@@ -18,13 +18,10 @@ import java.util.TimerTask;
 
 public class RandomWordGenerator extends AppCompatActivity {
 
-    Timer timer;
-
     private TextView countdownText;
     private TextView randomWord;
     private CountDownTimer countDownTimer;
     private long timeLeftInMilliseconds = 5000;
-    private boolean timerRunning;
 
     private String[] words = {"tree", "bench", "squirrel", "hat", "nose"};
 
@@ -39,8 +36,6 @@ public class RandomWordGenerator extends AppCompatActivity {
 
         //Generate a random word from the string array
         //TODO: Create a database for words
-//        Random random = new Random();
-//        int x = random.nextInt(words.length);
         int x = (int)(Math.random() * words.length + 1);
         randomWord.setText(words[x]);
 
