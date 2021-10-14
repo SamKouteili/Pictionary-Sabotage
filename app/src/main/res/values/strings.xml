@@ -6,4 +6,7 @@
     <!--    Drawing Menu Strings-->
     <string name="action_brush">Brush</string>
     <string name="action_erase">Eraser</string>
+
+    <!--    Random Word Generator Strings -->
+    <string name="finish">Back To Main Menu</string>
 </resources>

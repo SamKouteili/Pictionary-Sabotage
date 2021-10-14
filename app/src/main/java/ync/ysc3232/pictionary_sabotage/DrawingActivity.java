@@ -20,7 +20,6 @@ public class DrawingActivity extends AppCompatActivity {
     private long timeLeftToDraw = 10000; //10 seconds
     private CountDownTimer countDownTimer;
     private TextView countdownText;
-    private TextView numberOfTimesRouted; //Number of times we have seen this screen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +28,6 @@ public class DrawingActivity extends AppCompatActivity {
 
         drawer_view = (DrawerView)findViewById(R.id.drawer_view);
         countdownText = findViewById(R.id.countDown_draw);
-        numberOfTimesRouted = findViewById(R.id.timesScreenShowUp);
 
         bottom_toolbar = (Toolbar) findViewById(R.id.toolbar_bottom);
         bottom_toolbar.inflateMenu(R.menu.menu_drawing);
@@ -78,7 +76,7 @@ public class DrawingActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                Intent intent = new Intent(DrawingActivity.this, Random.class);
+                Intent intent = new Intent(DrawingActivity.this, RandomWordGenerator.class);
                 startActivity(intent);
             }
         }.start();

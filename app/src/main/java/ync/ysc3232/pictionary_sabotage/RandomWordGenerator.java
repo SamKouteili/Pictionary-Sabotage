@@ -5,16 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.sql.Array;
-import java.sql.Time;
-import java.util.List;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class RandomWordGenerator extends AppCompatActivity {
 
@@ -22,6 +16,7 @@ public class RandomWordGenerator extends AppCompatActivity {
     private TextView randomWord;
     private CountDownTimer countDownTimer;
     private long timeLeftInMilliseconds = 5000;
+    private Button finish;
 
     private String[] words = {"tree", "bench", "squirrel", "hat", "nose"};
 
@@ -36,10 +31,22 @@ public class RandomWordGenerator extends AppCompatActivity {
 
         //Generate a random word from the string array
         //TODO: Create a database for words
-        int x = (int)(Math.random() * words.length + 1);
+        int x = (int)(Math.random() * words.length);
         randomWord.setText(words[x]);
 
+        //Immediately start the timer
         startTimer();
+
+        finish = findViewById(R.id.finish);
+        finish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                stopTimer();
+                Intent intent = new Intent(RandomWordGenerator.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     public void startTimer() {
@@ -62,5 +69,9 @@ public class RandomWordGenerator extends AppCompatActivity {
                 startActivity(intent);
             }
         }.start();
+    }
+
+    public void stopTimer() {
+        countDownTimer.cancel();
     }
 }
