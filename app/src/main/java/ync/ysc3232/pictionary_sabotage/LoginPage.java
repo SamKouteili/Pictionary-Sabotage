@@ -62,6 +62,8 @@ public class LoginPage extends AppCompatActivity {
             etPass.setError("Field can't be empty");
         } else if (password.length() < 8){
             etPass.setError("Password must have at least 8 characters");
+        } else if (password.equals("password") || password.equals("12345678")){
+            etPass.setError("are u for real?");
         } else {
             return true;
         }
