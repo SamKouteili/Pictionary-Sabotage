@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import java.util.Random;
+
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -24,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, DrawingActivity.class);
+                Intent intent = new Intent(MainActivity.this, RandomWordGenerator.class);
                 startActivity(intent);
             }
         });
