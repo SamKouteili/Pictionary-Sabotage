@@ -1,9 +1,13 @@
 <resources>
-<!--    Main Menu Strings-->
+    <!--    Main Menu Strings-->
     <string name="app_name">Pictionary-Sabotage</string>
     <string name="play">PLAY</string>
 
-<!--    Drawing Menu Strings-->
+    <!--    Drawing Menu Strings-->
     <string name="action_brush">Brush</string>
     <string name="action_erase">Eraser</string>
+
+    <!--    Podium Menu Strings-->
+    <string name="return_to_menu">MAIN MENU</string>
+    <string name="podium_image">Podium</string>
 </resources>
