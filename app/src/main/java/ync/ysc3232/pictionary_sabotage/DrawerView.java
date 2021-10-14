@@ -13,12 +13,21 @@ import android.view.View;
 
 public class DrawerView extends View {
 
+    // this is the path where the drawing vertices are saved
     private Path draw_path;
+    // this is the brush that will paint the drawpath
     private Paint brush;
+    // i was told to write this idk wat it does
     private Paint canvas_paint;
+    // this is the canvas where the drawpaths and brushes are saved
     private Canvas draw_canvas;
+    // this is the canvas bitmap
     private Bitmap canvas_bitmap;
+
+    // this is the default paint color
     private int paint_color = Color.BLACK;
+
+    // this is the brush size
     private float brush_size;
 
     private void init(){
@@ -26,6 +35,7 @@ public class DrawerView extends View {
 
         draw_path = new Path();
         brush = new Paint();
+        // setting brush attributes
         brush.setColor(paint_color);
         brush.setAntiAlias(true);
         brush.setStrokeWidth(brush_size);
@@ -36,27 +46,33 @@ public class DrawerView extends View {
         canvas_paint = new Paint(Paint.DITHER_FLAG);
     }
 
+    // initializing everything
     public DrawerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
+    // eraser mode is just big white brush
     public void EraserMode(){
-        brush.setColor(Color.WHITE);
-        brush.setStrokeWidth(15f);
+        brush.setColor(getResources().getColor(R.color.backg));
+        brush.setStrokeWidth(30f);
     }
 
+    // drawing mode is just normal brush
     public void DrawingMode(){
         brush.setColor(paint_color);
         brush.setStrokeWidth(brush_size);
     }
 
+    // when the view is invalidated this method is called, so this is how show the users
+    // the drawings
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawBitmap(canvas_bitmap, 0 , 0, canvas_paint);
         canvas.drawPath(draw_path, brush);
     }
 
+    // this is creating the canvas when our screen is initialized
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
@@ -64,6 +80,7 @@ public class DrawerView extends View {
         draw_canvas = new Canvas(canvas_bitmap);
     }
 
+    //drawing events
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         float touch_x = event.getX();
