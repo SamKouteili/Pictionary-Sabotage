@@ -65,7 +65,7 @@ public class RandomWordGenerator extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                Intent intent = new Intent(RandomWordGenerator.this, PodiumActivity.class);
+                Intent intent = new Intent(RandomWordGenerator.this, DrawingActivity.class);
                 startActivity(intent);
             }
         }.start();
