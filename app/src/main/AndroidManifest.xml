@@ -25,7 +25,11 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"/>
+        <activity
+            android:name=".PodiumActivity"
+            android:exported="true" />
         <activity android:name=".DrawingActivity" />
+
     </application>
 
 </manifest>

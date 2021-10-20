@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PodiumActivity">
+
+    <Button
+        android:id="@+id/returnToMenuButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/return_to_menu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/podiumImage" />
+
+    <ImageView
+        android:id="@+id/podiumImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="76dp"
+        android:background="@color/white"
+        android:contentDescription="@string/podium_image"
+        android:cropToPadding="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/podium_img" />
+
+    <TextView
+        android:id="@+id/secondPos"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="301dp"
+        android:text="@string/second_place"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/podiumImage"
+        app:layout_constraintStart_toStartOf="@+id/podiumImage" />
+
+    <TextView
+        android:id="@+id/thirdPos"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="280dp"
+        android:layout_marginBottom="264dp"
+        android:text="@string/third_place"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/podiumImage"
+        app:layout_constraintStart_toStartOf="@+id/podiumImage" />
+
+    <TextView
+        android:id="@+id/firstPos"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="152dp"
+        android:layout_marginBottom="348dp"
+        android:text="@string/first_place"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/podiumImage"
+        app:layout_constraintStart_toStartOf="@+id/podiumImage" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
