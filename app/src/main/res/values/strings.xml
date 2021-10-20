@@ -10,4 +10,8 @@
     <!--    Podium Menu Strings-->
     <string name="return_to_menu">MAIN MENU</string>
     <string name="podium_image">Podium</string>
+    <string name="first_place">First</string>
+    <string name="second_place">Second</string>
+    <string name="third_place">Third</string>
+
 </resources>
