@@ -42,7 +42,7 @@ public class RandomWordGenerator extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 stopTimer();
-                Intent intent = new Intent(RandomWordGenerator.this, MainActivity.class);
+                Intent intent = new Intent(RandomWordGenerator.this, PodiumActivity.class);
                 startActivity(intent);
             }
         });
@@ -65,7 +65,7 @@ public class RandomWordGenerator extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                Intent intent = new Intent(RandomWordGenerator.this, DrawingActivity.class);
+                Intent intent = new Intent(RandomWordGenerator.this, PodiumActivity.class);
                 startActivity(intent);
             }
         }.start();
