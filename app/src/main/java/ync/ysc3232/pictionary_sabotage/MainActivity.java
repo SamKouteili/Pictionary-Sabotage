@@ -12,6 +12,9 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.Random;
 
+/**
+ * Default page of the application. Allows to start game or join an existing one
+ */
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -23,12 +26,9 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         Button button = findViewById(R.id.startGameButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, RandomWordGenerator.class);
-                startActivity(intent);
-            }
+        button.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, RandomWordGenerator.class);
+            startActivity(intent);
         });
 
         ImageView img = (ImageView)findViewById(R.id.backg);

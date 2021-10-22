@@ -17,6 +17,10 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.regex.Pattern;
 
+/**
+ * Login page for the application. Handles user management. Logging in adds a user to the firebase
+ * database. This class internally validates the email and password for the users.
+ */
 public class LoginPage extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -34,12 +38,19 @@ public class LoginPage extends AppCompatActivity {
         etPass = findViewById(R.id.setPassword);
     }
 
+    /**
+     * Start loading the application.
+     */
     @Override
     public void onStart() {
         super.onStart();
         loadMain();
     }
 
+    /**
+     * Validates user's email address
+     * @return boolean - true if email valid, false otherwise
+     */
     //credit to SO user user14245642 for the great sanity checks
     private boolean validateEmail(){
 
@@ -56,6 +67,10 @@ public class LoginPage extends AppCompatActivity {
         return false;
     }
 
+    /**
+     * Validates user's password
+     * @return true if valid password, false otherwise
+     */
     private boolean validatePassword(){
         String password = etPass.getText().toString().trim();
         if (password.isEmpty()){
@@ -70,6 +85,10 @@ public class LoginPage extends AppCompatActivity {
         return false;
     }
 
+    /**
+     * Login button, verifies user credentials and starts the activity.
+     * @param v view to transfer to, this case main screen
+     */
     public void loginButtonEvent(View v) {
         if (!validateEmail() || !validatePassword()){
             Toast.makeText(LoginPage.this, "Cannot Create Account", Toast.LENGTH_SHORT).show();
@@ -78,6 +97,11 @@ public class LoginPage extends AppCompatActivity {
         loginToFirebase(etEmail.getText().toString().trim(), etPass.getText().toString().trim());
     }
 
+    /**
+     * Logging in to the firebase database with the credentials.
+     * @param email user's email
+     * @param password user's password
+     */
     public void loginToFirebase(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(LoginPage.this, new OnCompleteListener<AuthResult>() {
@@ -98,6 +122,9 @@ public class LoginPage extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Load the MainActivity screen.
+     */
     public void loadMain() {
         FirebaseUser currUser = mAuth.getCurrentUser();
         //updateUI(currUser);
