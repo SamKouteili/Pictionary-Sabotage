@@ -9,7 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-
+/**
+ * RandomWordGenerator calls from an inbuilt word database and provides methods
+ * that return one of these words. This is necessary for the pictionary rounds.
+ * Class also provides functionality for starting/ending different rounds.
+ */
 public class RandomWordGenerator extends AppCompatActivity {
 
     private TextView countdownText;
@@ -21,6 +25,11 @@ public class RandomWordGenerator extends AppCompatActivity {
     private String[] words = {"tree", "bench", "squirrel", "hat", "nose"};
 
 
+    /**
+     * Instantiates round instance. Choses a random word from the word bank
+     * and runs the timer.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +58,9 @@ public class RandomWordGenerator extends AppCompatActivity {
 
     }
 
+    /**
+     * Creates a count down timer and starts it.
+     */
     public void startTimer() {
         countDownTimer = new CountDownTimer(timeLeftInMilliseconds, 1000) {
             @Override
@@ -71,6 +83,9 @@ public class RandomWordGenerator extends AppCompatActivity {
         }.start();
     }
 
+    /**
+     * Stops the count down timer.
+     */
     public void stopTimer() {
         countDownTimer.cancel();
     }
