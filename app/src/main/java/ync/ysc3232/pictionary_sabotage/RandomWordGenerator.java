@@ -22,7 +22,7 @@ public class RandomWordGenerator extends AppCompatActivity {
     private long timeLeftInMilliseconds = 5000;
     private Button finish;
 
-    private String[] words = {"tree", "bench", "squirrel", "hat", "nose"};
+    String[] words = {"tree", "bench", "squirrel", "hat", "nose"};
 
 
     /**
@@ -39,7 +39,6 @@ public class RandomWordGenerator extends AppCompatActivity {
         randomWord = findViewById(R.id.randomWord);
 
         //Generate a random word from the string array
-        //TODO: Create a database for words
         int x = (int)(Math.random() * words.length);
         randomWord.setText(words[x]);
 
@@ -77,7 +76,7 @@ public class RandomWordGenerator extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                Intent intent = new Intent(RandomWordGenerator.this, DrawingActivity.class);
+                Intent intent = new Intent(RandomWordGenerator.this, SaboteurActivity.class);
                 startActivity(intent);
             }
         }.start();
