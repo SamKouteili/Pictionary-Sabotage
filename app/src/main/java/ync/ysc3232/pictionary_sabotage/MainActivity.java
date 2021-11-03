@@ -13,7 +13,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import java.util.Random;
 
 /**
- * Default page of the application. Allows to start game or join an existing one
+ * Default page of the application. Allows to start game or join an existing one.
  */
 public class MainActivity extends AppCompatActivity {
 

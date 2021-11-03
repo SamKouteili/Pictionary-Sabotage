@@ -12,6 +12,12 @@ import android.widget.TextView;
 
 import java.util.Random;
 
+/**
+ *  This activity connects the Drawer's view to the main game loop.
+ *  It allows the player to select different features from the
+ *  DrawerView class like drawing or erasing and also connects
+ *  to the RandomWordGenerator which handles the game loop.
+ */
 public class DrawingActivity extends AppCompatActivity {
 
     private Toolbar bottom_toolbar;
@@ -43,6 +49,12 @@ public class DrawingActivity extends AppCompatActivity {
 
         }
 
+    /**
+     * Switches between drawing and erasing modes based on the icon
+     * clicked.
+     *
+     * @param itemId - id of the tool pressed (draw / erase )
+     */
     private void handleDrawingIconTouched(int itemId){
         switch (itemId){
             case R.id.action_erase:
@@ -60,6 +72,10 @@ public class DrawingActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Starts the main game loop by passing this activity to the RandomWordGenerator
+     * updates the countdown timer.
+     */
     public void startTimer() {
         countDownTimer = new CountDownTimer(timeLeftToDraw, 1000) {
             @Override

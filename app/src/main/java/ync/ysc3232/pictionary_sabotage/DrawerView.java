@@ -11,6 +11,12 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+/**
+ * This view encapsulates all of the drawing functionality of the
+ * game, i.e., drawing and erasing.
+ *
+ * The methods in the class have descriptive names.
+ */
 public class DrawerView extends View {
 
     private Path draw_path;
