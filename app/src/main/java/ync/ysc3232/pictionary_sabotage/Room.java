@@ -38,16 +38,19 @@ public class Room extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Create a random room number
-                int roomId = (int)(Math.random() * 10000);
+                String roomId = String.valueOf((int)(Math.random() * 10000));
 
                 //TODO: If a room id is taken, we cannot use it again
                 //TODO: Create a class for room data
-                DatabaseReference newRoom = room_database.child(String.valueOf(roomId));
+                DatabaseReference newRoom = room_database.child(roomId);
                 Map<String, String> roomData = new HashMap<String, String>();
                 roomData.put("no_of_players", "1");
                 newRoom.setValue(roomData);
 
-                Intent intent = new Intent(Room.this, RandomWordGenerator.class);
+                //Passing room Id using intent
+                //https://stackoverflow.com/questions/2091465/how-do-i-pass-data-between-activities-in-android-application#:~:text=The%20easiest%20way%20to%20do,sessionId)%3B%20startActivity(intent)%3B
+                Intent intent = new Intent(Room.this, WaitingRoom.class);
+                intent.putExtra("roomId", roomId);
                 startActivity(intent);
             }
         });

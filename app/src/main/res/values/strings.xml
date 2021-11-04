@@ -11,6 +11,10 @@
     <string name="create_room">Create Room</string>
     <string name="join_room">Join Room</string>
 
+    <!--    Waiting Room -->
+    <string name="start">Start Game</string>
+    <string name="players">Players</string>
+
     <!--    Random Word Generator Strings -->
     <string name="finish">Back To Main Menu</string>
 
