@@ -51,11 +51,11 @@ public class PodiumActivity extends AppCompatActivity {
         allPlayers.sort(Comparator.comparing(PlayerDbModel::getScore));
         // Set the values to the winners
         String nameAndPoints1 = allPlayers.get(0).getPlayerName() +
-                                "\n" + allPlayers.get(0).getScore();
+                                "\n" + allPlayers.get(0).getScore() + " pts.";
         String nameAndPoints2 = allPlayers.get(1).getPlayerName() +
-                "\n" + allPlayers.get(1).getScore();
+                "\n" + allPlayers.get(1).getScore() + " pts.";
         String nameAndPoints3 = allPlayers.get(2).getPlayerName() +
-                "\n" + allPlayers.get(2).getScore();
+                "\n" + allPlayers.get(2).getScore() + " pts.";
 
         fstPos.setText(nameAndPoints1);
         sndPos.setText(nameAndPoints2);
