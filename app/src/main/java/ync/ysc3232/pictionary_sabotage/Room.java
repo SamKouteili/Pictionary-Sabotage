@@ -55,7 +55,7 @@ public class Room extends AppCompatActivity {
                 //TODO: If a room id is taken, we cannot use it again
                 DatabaseReference newRoom = room_database.child(roomId);
                 roomData = new RoomData(roomId);
-                roomData.addPlayer(getCurrentUser(), 0);
+                roomData.addPlayer(getCurrentUser(), "Undecided");
                 newRoom.setValue(roomData);
 
                 //Passing room Id using intent
@@ -71,6 +71,7 @@ public class Room extends AppCompatActivity {
             public void onClick(View view){
                 String roomId = eneteredRoomId.getText().toString().trim();
 
+                //Make sure room number is entered
                 if (roomId.isEmpty()){
                     eneteredRoomId.setError("Room number is empty");
                     return;
@@ -89,7 +90,13 @@ public class Room extends AppCompatActivity {
                         Toast.makeText(Room.this, "Invalid Room Number", Toast.LENGTH_SHORT).show();
                     }
                 });
-                roomData.addPlayer(getCurrentUser(), 0);
+
+                if (roomData == null) {
+                    Toast.makeText(Room.this, "Invalid Room Number", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                roomData.addPlayer(getCurrentUser(), "Undecided");
                 room_database.child(roomId).setValue(roomData);
 
                 Intent intent = new Intent(Room.this, WaitingRoom.class);

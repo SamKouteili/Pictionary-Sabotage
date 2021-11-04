@@ -11,14 +11,6 @@ public class RoomData {
     int numberOfPlayers;
     Map<String, String> players;
     Map<String, Integer> scores;
-    /**
-     * Role ids
-     * 0 - Undecided
-     * 1 - Guesser
-     * 2 - Saboteur
-     * 3 - Drawer
-     */
-    List<String> roles;
 
     public RoomData(){}
 
@@ -27,8 +19,7 @@ public class RoomData {
         this.numberOfPlayers = 0;
         this.players = new HashMap<>();
         this.scores = new HashMap<>();
-        String[] roles = {"Undecided", "Guesser", "Saboteur", "Drawer"};
-        this.roles = Arrays.asList(roles);
+//        String[] roles = {"Undecided", "Guesser", "Saboteur", "Drawer"};
     }
 
     public String getRoomId() {
@@ -63,24 +54,16 @@ public class RoomData {
         this.scores = scores;
     }
 
-    public List<String> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
-    }
-
-    void addPlayer(String player, int roleId){
+    void addPlayer(String player, String roleId){
         if (!players.containsKey(player)) {
             numberOfPlayers += 1;
-            players.put(player, roles.get(roleId));
+            players.put(player, roleId);
             scores.put(player, 0);
         }
     }
 
-    void changePLayerRole(String player, int roleId){
-        players.put(player, roles.get(roleId));
+    void changePLayerRole(String player, String roleId){
+        players.put(player, roleId);
     }
 
     void addScoreTo(String player){
