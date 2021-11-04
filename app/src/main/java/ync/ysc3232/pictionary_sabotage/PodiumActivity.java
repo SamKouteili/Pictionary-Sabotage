@@ -32,6 +32,8 @@ public class PodiumActivity extends AppCompatActivity {
     private final PlayerDbModel sample = new PlayerDbModel("TestPlayer", "Drawer", 42);
     private ArrayList<PlayerDbModel> allPlayers = new ArrayList<>(Arrays.asList(sample,sample,sample));
     private String roomId = "O1";
+
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,13 +68,20 @@ public class PodiumActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Sets the room ID to the current game id.
+     * @param roomId - id of the room
+     */
     public void setRoomId(String roomId){
         this.roomId = roomId;
     }
 
-
+    /**
+     * Fetches the players from the database, puts the values into the @allPlayers field.
+     */
     private void fetchPlayers(){
-        DatabaseReference rw_database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
+        DatabaseReference rw_database = FirebaseDatabase
+                .getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
                 .getReference().child("Rooms").child(roomId);
 
         rw_database.addValueEventListener(new ValueEventListener() {

@@ -1,5 +1,9 @@
 package ync.ysc3232.pictionary_sabotage;
 
+/**
+ * This class is an abstraction of the representation of players in
+ * the database. Contains only basic getters and setters.
+ */
 public class PlayerDbModel {
 
     private String playerName;
