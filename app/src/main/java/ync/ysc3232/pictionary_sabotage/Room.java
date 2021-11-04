@@ -1,16 +1,26 @@
 package ync.ysc3232.pictionary_sabotage;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.renderscript.Sampler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +29,12 @@ public class Room extends AppCompatActivity {
 
     private Button createRoom;
     private Button joinRoom;
+    private EditText eneteredRoomId;
+    private boolean validRoomId;
+    private RoomData roomData;
+
+    DatabaseReference room_database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
+            .getReference().child("Rooms");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,11 +43,7 @@ public class Room extends AppCompatActivity {
 
         createRoom = findViewById(R.id.createRoom);
         joinRoom = findViewById(R.id.joinRoom);
-
-        DatabaseReference room_database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
-                .getReference().child("Rooms");
-
-
+        eneteredRoomId = findViewById(R.id.enterRoomId);
 
         //At createRoom, immediately create a new room with a new code and go to Waiting Room
         createRoom.setOnClickListener(new View.OnClickListener() {
@@ -41,10 +53,9 @@ public class Room extends AppCompatActivity {
                 String roomId = String.valueOf((int)(Math.random() * 10000));
 
                 //TODO: If a room id is taken, we cannot use it again
-                //TODO: Create a class for room data
                 DatabaseReference newRoom = room_database.child(roomId);
-                Map<String, String> roomData = new HashMap<String, String>();
-                roomData.put("no_of_players", "1");
+                roomData = new RoomData(roomId);
+                roomData.addPlayer(getCurrentUser(), 0);
                 newRoom.setValue(roomData);
 
                 //Passing room Id using intent
@@ -55,9 +66,52 @@ public class Room extends AppCompatActivity {
             }
         });
 
+        joinRoom.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                String roomId = eneteredRoomId.getText().toString().trim();
+
+                if (roomId.isEmpty()){
+                    eneteredRoomId.setError("Room number is empty");
+                    return;
+                }
+
+                //Fetch current room data
+                room_database.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        roomData = snapshot.child(roomId).getValue(RoomData.class);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e("firebase", "Error getting existing room.");
+                        Toast.makeText(Room.this, "Invalid Room Number", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                roomData.addPlayer(getCurrentUser(), 0);
+                room_database.child(roomId).setValue(roomData);
+
+                Intent intent = new Intent(Room.this, WaitingRoom.class);
+                intent.putExtra("roomId", roomId);
+                startActivity(intent);
+            }
+
+        });
+
         ImageView img = (ImageView)findViewById(R.id.backg);
         img.setBackgroundResource(R.drawable.bg_animation);
         AnimationDrawable frameAnimation = (AnimationDrawable) img.getBackground();
         frameAnimation.start();
+    }
+
+    public String getCurrentUser(){
+        //Get current user
+        //Remove the email @
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        String cUsrEmail = mAuth.getCurrentUser().getEmail();
+        int userAt = cUsrEmail.lastIndexOf("@");
+        String userId = cUsrEmail.substring(0, userAt);
+        return userId;
     }
 }

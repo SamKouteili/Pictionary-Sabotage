@@ -14,6 +14,7 @@
     <!--    Waiting Room -->
     <string name="start">Start Game</string>
     <string name="players">Players</string>
+    <string name="chooseRole">Choose Role</string>
 
     <!--    Random Word Generator Strings -->
     <string name="finish">Back To Main Menu</string>
