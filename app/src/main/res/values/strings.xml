@@ -7,6 +7,10 @@
     <string name="action_brush">Brush</string>
     <string name="action_erase">Eraser</string>
 
+    <!--    Room Main Menu Strings -->
+    <string name="create_room">Create Room</string>
+    <string name="join_room">Join Room</string>
+
     <!--    Random Word Generator Strings -->
     <string name="finish">Back To Main Menu</string>
 
