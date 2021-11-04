@@ -35,7 +35,7 @@
         android:layout_marginBottom="301dp"
         android:text="@string/second_place"
         android:textAlignment="center"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/podiumImage"
         app:layout_constraintStart_toStartOf="@+id/podiumImage" />
 
@@ -47,7 +47,7 @@
         android:layout_marginBottom="264dp"
         android:text="@string/third_place"
         android:textAlignment="center"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/podiumImage"
         app:layout_constraintStart_toStartOf="@+id/podiumImage" />
 
@@ -59,7 +59,7 @@
         android:layout_marginBottom="348dp"
         android:text="@string/first_place"
         android:textAlignment="center"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/podiumImage"
         app:layout_constraintStart_toStartOf="@+id/podiumImage" />
 
