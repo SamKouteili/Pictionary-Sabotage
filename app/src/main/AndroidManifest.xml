@@ -13,6 +13,12 @@
         android:theme="@style/Theme.PictionarySabotage"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".GuesserActivity"
+            android:exported="true" />
+        <activity
+            android:name=".GuesserView"
+            android:exported="true" />
+        <activity
             android:name=".SaboteurActivity"
             android:exported="true" />
         <activity

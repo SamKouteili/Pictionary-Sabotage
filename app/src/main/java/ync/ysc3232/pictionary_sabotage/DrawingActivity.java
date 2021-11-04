@@ -41,7 +41,7 @@ public class DrawingActivity extends AppCompatActivity {
 
         startTimer();
 
-        }
+    }
 
     private void handleDrawingIconTouched(int itemId){
         switch (itemId){
