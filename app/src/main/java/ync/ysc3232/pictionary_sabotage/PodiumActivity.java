@@ -1,5 +1,6 @@
 package ync.ysc3232.pictionary_sabotage;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,8 +11,14 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 
 /**
@@ -20,11 +27,14 @@ import java.util.Comparator;
  * @author Jachym
  */
 public class PodiumActivity extends AppCompatActivity {
-    private FirebaseAnalytics mFirebaseAnalytics;
 
     //Default values for the winners
-    private String[] winners = {"Drawer", "Saboteur", "Guesser"};
-    private int[] points = {0,0,0};
+    private final PlayerDbModel sample = new PlayerDbModel("TestPlayer", "Drawer", 42);
+    private ArrayList<PlayerDbModel> allPlayers = new ArrayList<>(Arrays.asList(sample,sample,sample));
+    private String roomId = "O1";
+
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,15 +46,20 @@ public class PodiumActivity extends AppCompatActivity {
         TextView fstPos = findViewById(R.id.firstPos);
         TextView sndPos = findViewById(R.id.secondPos);
         TextView trdPos = findViewById(R.id.thirdPos);
-//      updatePoints(true, allPlayers);
-        String s1 = winners[0] + "\n" + points[0];
-        String s2 = winners[1] + "\n" + points[1];
-        String s3 = winners[2] + "\n" + points[2];
 
+        fetchPlayers();
+        allPlayers.sort(Comparator.comparing(PlayerDbModel::getScore));
         // Set the values to the winners
-        fstPos.setText(s1);
-        sndPos.setText(s2);
-        trdPos.setText(s3);
+        String nameAndPoints1 = allPlayers.get(0).getPlayerName() +
+                                "\n" + allPlayers.get(0).getScore() + " pts.";
+        String nameAndPoints2 = allPlayers.get(1).getPlayerName() +
+                "\n" + allPlayers.get(1).getScore() + " pts.";
+        String nameAndPoints3 = allPlayers.get(2).getPlayerName() +
+                "\n" + allPlayers.get(2).getScore() + " pts.";
+
+        fstPos.setText(nameAndPoints1);
+        sndPos.setText(nameAndPoints2);
+        trdPos.setText(nameAndPoints3);
 
 
         button.setOnClickListener(view -> {
@@ -54,38 +69,36 @@ public class PodiumActivity extends AppCompatActivity {
     }
 
     /**
-     * Setter function - fetches the top three scoring players from the database
-     * and sets their corresponding place in the winners array.
-     * @param fst - top scoring player's name
-     * @param snd - second scoring player's name
-     * @param trd - thrid scoring player's name
+     * Sets the room ID to the current game id.
+     * @param roomId - id of the room
      */
-    private void setWinners(String fst, String snd, String trd) {
-            this.winners = new String[]{fst, snd, trd};
-    }
-    private void setPoints(int fst, int snd, int trd){
-        this.points = new int[]{fst, snd, trd};
+    public void setRoomId(String roomId){
+        this.roomId = roomId;
     }
 
-//    /**
-//     * This function updates the number of points each player has based on
-//     * the outcome of the round.
-//     * @param drawerWon - outcome of the round, true if the prompt was guessed correctly
-//     * @param allPlayers - array of all players in the game
-//     */
-//    @RequiresApi(api = Build.VERSION_CODES.N)
-//    private void updatePoints(Boolean drawerWon, Player[] allPlayers) {
-//        for (Player player : allPlayers) {
-//            if (drawerWon && (player == Drawer || player == Guesser)){
-//                player.points += 1;
-//            } else {
-//                if (!drawerWon && player == Saboteur){
-//                    player.points += 1;
-//                }
-//            }
-//        }
-//        Collections.sort(allPlayers, Comparator.comparingInt(Player::points));
-//        setWinners(allPlayers[0].name, allPlayers[1].name, allPlayers[2].name);
-//        setPoints(allPlayers[0].points, allPlayers[1].points, allPlayers[2].points);
-//    }
+    /**
+     * Fetches the players from the database, puts the values into the @allPlayers field.
+     */
+    private void fetchPlayers(){
+        DatabaseReference rw_database = FirebaseDatabase
+                .getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
+                .getReference().child("Rooms").child(roomId);
+
+        rw_database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                allPlayers = new ArrayList<>();
+                for (DataSnapshot snap : snapshot.getChildren()){
+                    PlayerDbModel player = snap.getValue(PlayerDbModel.class);
+                    allPlayers.add(player);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
 }
