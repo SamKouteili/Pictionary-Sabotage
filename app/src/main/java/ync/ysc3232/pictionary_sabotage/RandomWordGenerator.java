@@ -51,6 +51,7 @@ public class RandomWordGenerator extends AppCompatActivity {
         //Generate a random word from the string array - get words from data base
         DatabaseReference rw_database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
                 .getReference().child("random_words");
+
         rw_database.child("num_words").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -72,16 +73,15 @@ public class RandomWordGenerator extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 randomWord.setText(snapshot.getValue().toString());
+
+                //Only start time when word is generated
+                startTimer();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.e("firebase", "Data not retrieved");
             }
         });
-
-
-        //Immediately start the timer
-        startTimer();
 
         finish = findViewById(R.id.finish);
         finish.setOnClickListener(new View.OnClickListener() {
