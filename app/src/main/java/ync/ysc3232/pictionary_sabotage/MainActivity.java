@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button button = findViewById(R.id.startGameButton);
         button.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, RandomWordGenerator.class);
+            Intent intent = new Intent(MainActivity.this, Room.class);
             startActivity(intent);
         });
 
