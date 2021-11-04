@@ -11,6 +11,7 @@ public class RoomData {
     int numberOfPlayers;
     Map<String, String> players;
     Map<String, Integer> scores;
+    boolean gameStarted;
 
     public RoomData(){}
 
@@ -19,6 +20,7 @@ public class RoomData {
         this.numberOfPlayers = 0;
         this.players = new HashMap<>();
         this.scores = new HashMap<>();
+        this.gameStarted = false;
 //        String[] roles = {"Undecided", "Guesser", "Saboteur", "Drawer"};
     }
 
@@ -52,6 +54,14 @@ public class RoomData {
 
     public void setScores(Map<String, Integer> scores) {
         this.scores = scores;
+    }
+
+    public boolean isGameStarted() {
+        return gameStarted;
+    }
+
+    public void setGameStarted(boolean gameStarted) {
+        this.gameStarted = gameStarted;
     }
 
     void addPlayer(String player, String roleId){

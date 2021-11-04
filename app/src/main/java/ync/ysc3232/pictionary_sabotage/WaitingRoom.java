@@ -68,13 +68,24 @@ public class WaitingRoom extends AppCompatActivity {
         rooms_database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                roomData = snapshot.child(roomId).getValue(RoomData.class);
+
+                //If the data update says game has started - move to next page
+                if (roomData.isGameStarted()) {
+                    Intent intent = new Intent(WaitingRoom.this, RandomWordGenerator.class);
+                    startActivity(intent);
+                    return;
+                }
+
                 int i = 0;
                 roomData = snapshot.child(roomId).getValue(RoomData.class);
                 for (DataSnapshot playerSnapShot: snapshot.child(roomId).child("players").getChildren()) {
+                    Log.d("waitingRoom", "Players include " + playerSnapShot.getKey());
                     playersText[i].setText(playerSnapShot.getKey());
                     spinners[i].setEnabled(true);
                     ChoosingRoleSpinner spinnerListener = new ChoosingRoleSpinner(roomData, playerSnapShot.getKey());
                     spinners[i].setOnItemSelectedListener(spinnerListener);
+                    i += 1;
                 }
             }
             @Override
@@ -87,6 +98,7 @@ public class WaitingRoom extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 //Push all roles onto the data base
+                roomData.setGameStarted(true);
                 rooms_database.child(roomId).setValue(roomData);
 
                 Intent intent = new Intent(WaitingRoom.this, RandomWordGenerator.class);
