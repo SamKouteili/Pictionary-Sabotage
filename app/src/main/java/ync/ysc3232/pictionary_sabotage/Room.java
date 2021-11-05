@@ -25,12 +25,21 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.Map;
 
+/** Room Main Menu where player can choose to either create a new room or join
+ * an existing room.
+ * When user creates a new room (createRoom), a new instance of RoomData is created that includes the
+ * current user. The following data is pushed into the database.
+ * When a user joins an existing room (joinRoom), they will have the enter the room ID (eneteredRoomId)
+ * before joining.
+ *
+ * Room.java leads to WaitingRoom.java
+ */
+
 public class Room extends AppCompatActivity {
 
     private Button createRoom;
     private Button joinRoom;
     private EditText eneteredRoomId;
-    private boolean validRoomId;
     private RoomData roomData;
 
     DatabaseReference room_database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")

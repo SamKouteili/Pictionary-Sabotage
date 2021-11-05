@@ -22,6 +22,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+/** Waiting Room: After players joined a unique room, they come here
+ *  There are maximum 4 players.
+ *  Player IDs who joined the room are seen.
+ *  Players can choose what role they will be playing as (on the Spinner).
+ *  Room has a "Start Game" button that leads all players into the game.
+ *
+ *  Depending on what the current user's role is, WaitingRoom.java can lead to either
+ *  SaboteurActivity.java, DrawingAcitivity.java, or GuesserActivity.java
+ */
+
 public class WaitingRoom extends AppCompatActivity {
 
     RoomData roomData;
