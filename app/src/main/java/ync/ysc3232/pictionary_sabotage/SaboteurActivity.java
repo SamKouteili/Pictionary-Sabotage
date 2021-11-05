@@ -35,7 +35,7 @@ public class SaboteurActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_drawing);
+        setContentView(R.layout.activity_saboteur);
 
         saboteur_view = (DrawerView) findViewById(R.id.saboteur_view);
         countdownText = findViewById(R.id.countDown_draw);
