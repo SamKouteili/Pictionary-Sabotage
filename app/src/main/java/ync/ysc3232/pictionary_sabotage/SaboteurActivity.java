@@ -5,59 +5,118 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class SaboteurActivity extends AppCompatActivity {
 
-    private Toolbar bottom_toolbar;
-    private SaboteurView saboteur_view;
+    private Button saboteur_button;
+    private DrawerView saboteur_view;
 
-    private long timeLeftToDraw = 10000; //10 seconds
+
+    private long timeLeftToDraw = 20000; //10 seconds
     private CountDownTimer countDownTimer;
     private TextView countdownText;
+
+    private CountDownTimer sabotageTimer;
+    private CountDownTimer waitTimer;
+    private long waitTime = 10000;
+    private long sabotageTime = 3000;
+    private EditText countdownToSabotage;
+    private EditText countdownToWait;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawing);
 
-        saboteur_view = (SaboteurView) findViewById(R.id.drawer_view);
+        saboteur_view = (DrawerView) findViewById(R.id.saboteur_view);
         countdownText = findViewById(R.id.countDown_draw);
 
-        bottom_toolbar = (Toolbar) findViewById(R.id.toolbar_bottom);
-        bottom_toolbar.inflateMenu(R.menu.menu_drawing);
-//        bottom_toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                handleDrawingIconTouched(item.getItemId());
-//                return false;
-//            }
+        saboteur_button = (Button) findViewById(R.id.sabotage_button);
+
+        saboteur_button.setBackgroundColor(Color.RED);
+
+//        String w = "10";
+//        saboteur_button.setText(w);
+//        saboteur_button.setOnClickListener(view -> {
+//
 //        });
 
         startTimer();
+//        waitTimer();
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        return super.onOptionsItemSelected(item);
+    public void waitTimer() {
+        waitTimer = new CountDownTimer(waitTime, 1000) {
+            @Override
+            public void onTick(long l) {
+                waitTime = l;
+                int seconds = (int) (waitTime + 1000) / 1000;
+
+                //Update text
+                String updatedCountDown;
+                updatedCountDown = "" + seconds;
+                countdownToSabotage.setText(updatedCountDown);
+                saboteur_button.setText(updatedCountDown);
+
+            }
+
+            @Override
+            public void onFinish() {
+
+                saboteur_view.setCanDraw(true);
+                saboteur_button.setBackgroundColor(Color.GREEN);
+                // TODO: Potentially make this reactive to first touch
+                sabotageTimer();
+            }
+        }.start();
     }
+
+    public void sabotageTimer() {
+        sabotageTimer = new CountDownTimer(sabotageTime, 1000) {
+            @Override
+            public void onTick(long l) {
+                sabotageTime = l;
+                int seconds = (int) (sabotageTime + 1000) / 1000;
+
+                //Update text
+                String updatedCountDown;
+                updatedCountDown = "" + seconds;
+                countdownToWait.setText(updatedCountDown);
+
+            }
+
+            @Override
+            public void onFinish() {
+                saboteur_view.setCanDraw(false);
+                saboteur_button.setBackgroundColor(Color.RED);
+                // call waitTimer() when sabotageTimer finishes
+                waitTimer();
+            }
+        }.start();
+    }
+
 
     public void startTimer() {
         countDownTimer = new CountDownTimer(timeLeftToDraw, 1000) {
             @Override
             public void onTick(long l) {
                 timeLeftToDraw = l;
-                int seconds = (int) (timeLeftToDraw + 1000) / 1000; //Start from 10, end in 1
+                int seconds = (int) (timeLeftToDraw + 1000) / 1000;
 
                 //Update text
-                String updatedCountDownTest;
-                updatedCountDownTest = "" + seconds;
-                countdownText.setText(updatedCountDownTest);
+                String updatedCountDownText;
+                updatedCountDownText = "" + seconds;
+                countdownText.setText(updatedCountDownText);
 
             }
 
@@ -65,6 +124,7 @@ public class SaboteurActivity extends AppCompatActivity {
             public void onFinish() {
                 Intent intent = new Intent(SaboteurActivity.this, RandomWordGenerator.class);
                 startActivity(intent);
+                // TODO: Update Scores accordingly
             }
         }.start();
     }

@@ -27,6 +27,7 @@ public class DrawingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_drawing);
 
         drawer_view = (DrawerView)findViewById(R.id.drawer_view);
+        drawer_view.setCanDraw(true);
         countdownText = findViewById(R.id.countDown_draw);
 
         bottom_toolbar = (Toolbar) findViewById(R.id.toolbar_bottom);

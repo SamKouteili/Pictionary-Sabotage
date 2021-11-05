@@ -11,13 +11,16 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 public class GuesserActivity extends AppCompatActivity {
 
+    // TODO: Update expected_text with call from database
     String expected_text = "hello";
     EditText input_text;
-    private GuesserView guesser_view;
+    private DrawerView guesser_view;
 
-    private long timeLeftToDraw = 10000; //10 seconds
+    private long timeLeftToDraw = 20000; // 20 seconds
     private CountDownTimer countDownTimer;
     private TextView countdownText;
 
@@ -27,7 +30,7 @@ public class GuesserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_guesser);
 
         input_text = findViewById(R.id.GuesserInput);
-        guesser_view = (GuesserView) findViewById(R.id.guesser_view);
+        guesser_view = (DrawerView) findViewById(R.id.drawer_view);
         countdownText = findViewById(R.id.countDown_draw);
 
 
@@ -39,14 +42,14 @@ public class GuesserActivity extends AppCompatActivity {
      * Called when the user submits a word
      * */
     public void sendMessage(View view) {
-        String t = input_text.getText().toString().trim();
-        if (!t.equals(expected_text)){
-            input_text.setError("Incorrect Guess Inputted!");
+        String t = input_text.getText().toString().trim().toUpperCase();
+        if (!t.equals(expected_text.toUpperCase())){
+            input_text.setError("Wrong Guess!");
         } else {
             input_text.setError(null);
             // TODO: Add points to database
             // TODO: Ping all screens to move to next RandomWordGenerator session
-
+            // TODO: Move to next room
         }
     }
 
@@ -55,7 +58,7 @@ public class GuesserActivity extends AppCompatActivity {
             @Override
             public void onTick(long l) {
                 timeLeftToDraw = l;
-                int seconds = (int) (timeLeftToDraw + 1000) / 1000; //Start from 10, end in 1
+                int seconds = (int) (timeLeftToDraw + 1000) / 1000;
 
                 //Update text
                 String updatedCountDownTest;
