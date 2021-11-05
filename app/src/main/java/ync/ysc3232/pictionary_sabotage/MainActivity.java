@@ -13,7 +13,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import java.util.Random;
 
 /**
- * Default page of the application. Allows to start game or join an existing one
+ * Default page of the application. Allows to start game or join an existing one.
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button button = findViewById(R.id.startGameButton);
         button.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, RandomWordGenerator.class);
+            Intent intent = new Intent(MainActivity.this, Room.class);
             startActivity(intent);
         });
 

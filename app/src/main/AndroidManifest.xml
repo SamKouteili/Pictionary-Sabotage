@@ -16,13 +16,13 @@
             android:name=".GuesserActivity"
             android:exported="true" />
         <activity
-            android:name=".GuesserView"
-            android:exported="true" />
-        <activity
             android:name=".SaboteurActivity"
             android:exported="true" />
         <activity
-            android:name=".SaboteurView"
+            android:name=".WaitingRoom"
+            android:exported="true" />
+        <activity
+            android:name=".Room"
             android:exported="true" />
         <activity
             android:name=".LoginPage"

@@ -10,7 +10,7 @@
         android:id="@+id/randomWord"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Random Word Generated"
+        android:text=""
         android:textColor="#FF3700B3"
         android:textStyle="bold"
         android:fontFamily="casual"
