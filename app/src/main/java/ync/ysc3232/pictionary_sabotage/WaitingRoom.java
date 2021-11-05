@@ -101,10 +101,7 @@ public class WaitingRoom extends AppCompatActivity {
                 //Push all roles onto the data base
                 roomData.setGameStarted(true);
                 rooms_database.child(roomId).setValue(roomData);
-
-                Intent intent = new Intent(WaitingRoom.this, RandomWordGenerator.class);
-                intent.putExtra("roomId", roomId);
-                startActivity(intent);
+                //We do not set Intent here, it is done on line 75 onDataChange
             }
         });
     }
