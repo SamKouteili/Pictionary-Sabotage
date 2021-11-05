@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="roles">
+        <item>Undecided</item>
+        <item>Guesser</item>
+        <item>Saboteur</item>
+        <item>Drawer</item>
+    </string-array>
+</resources>

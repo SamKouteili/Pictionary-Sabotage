@@ -1,13 +1,25 @@
 package ync.ysc3232.pictionary_sabotage;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * PodiumActivity handles the victory screen which appears after
@@ -15,10 +27,14 @@ import com.google.firebase.analytics.FirebaseAnalytics;
  * @author Jachym
  */
 public class PodiumActivity extends AppCompatActivity {
-    private FirebaseAnalytics mFirebaseAnalytics;
 
     //Default values for the winners
-    private String[] winners = {"Drawer", "Saboteur", "Guesser"};
+    private final PlayerDbModel sample = new PlayerDbModel("TestPlayer", "Drawer", 42);
+    private ArrayList<PlayerDbModel> allPlayers = new ArrayList<>(Arrays.asList(sample,sample,sample));
+    private String roomId = "O1";
+
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,10 +47,19 @@ public class PodiumActivity extends AppCompatActivity {
         TextView sndPos = findViewById(R.id.secondPos);
         TextView trdPos = findViewById(R.id.thirdPos);
 
+        fetchPlayers();
+        allPlayers.sort(Comparator.comparing(PlayerDbModel::getScore));
         // Set the values to the winners
-        fstPos.setText(winners[0]);
-        sndPos.setText(winners[1]);
-        trdPos.setText(winners[2]);
+        String nameAndPoints1 = allPlayers.get(0).getPlayerName() +
+                                "\n" + allPlayers.get(0).getScore() + " pts.";
+        String nameAndPoints2 = allPlayers.get(1).getPlayerName() +
+                "\n" + allPlayers.get(1).getScore() + " pts.";
+        String nameAndPoints3 = allPlayers.get(2).getPlayerName() +
+                "\n" + allPlayers.get(2).getScore() + " pts.";
+
+        fstPos.setText(nameAndPoints1);
+        sndPos.setText(nameAndPoints2);
+        trdPos.setText(nameAndPoints3);
 
 
         button.setOnClickListener(view -> {
@@ -44,13 +69,36 @@ public class PodiumActivity extends AppCompatActivity {
     }
 
     /**
-     * Setter function - fetches the top three scoring players from the database
-     * and sets their corresponding place in the winners array.
-     * @param fst - top scoring player's name
-     * @param snd - second scoring player's name
-     * @param trd - thrid scoring player's name
+     * Sets the room ID to the current game id.
+     * @param roomId - id of the room
      */
-    public void setWinners(String fst, String snd, String trd) {
-            this.winners = new String[]{fst, snd, trd};
+    public void setRoomId(String roomId){
+        this.roomId = roomId;
     }
+
+    /**
+     * Fetches the players from the database, puts the values into the @allPlayers field.
+     */
+    private void fetchPlayers(){
+        DatabaseReference rw_database = FirebaseDatabase
+                .getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
+                .getReference().child("Rooms").child(roomId);
+
+        rw_database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                allPlayers = new ArrayList<>();
+                for (DataSnapshot snap : snapshot.getChildren()){
+                    PlayerDbModel player = snap.getValue(PlayerDbModel.class);
+                    allPlayers.add(player);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
 }
