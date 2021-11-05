@@ -137,21 +137,26 @@ public class RandomWordGenerator extends AppCompatActivity {
                     }
                 });
 
-                Intent intent = new Intent(RandomWordGenerator.this, SaboteurActivity.class);
+                Intent intent = new Intent(RandomWordGenerator.this, GuesserActivity.class);
                 intent.putExtra("round word", randomWord.toString().trim());
+                intent.putExtra("roomID", roomId);
                 startActivity(intent);
             }
         }.start();
     }
 
-    private Intent create_intent(@NonNull String role) {
+    private Intent assign_intent(@NonNull String role) {
+        Intent i;
         switch (role){
             case "Guesser" :
-                return new Intent(RandomWordGenerator.this, GuesserActivity.class);
+                i = new Intent(RandomWordGenerator.this, GuesserActivity.class);
+                return i;
             case "Saboteur" :
-                return new Intent(RandomWordGenerator.this, SaboteurActivity.class);
+                i = new Intent(RandomWordGenerator.this, SaboteurActivity.class);
+                return i;
             case "Drawer" :
-                return new Intent(RandomWordGenerator.this, DrawingActivity.class);
+                i = new Intent(RandomWordGenerator.this, DrawingActivity.class);
+                return i;
         }
         return null;
     }

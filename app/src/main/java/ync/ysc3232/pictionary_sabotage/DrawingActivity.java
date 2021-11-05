@@ -7,8 +7,15 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Random;
 
@@ -19,6 +26,12 @@ import java.util.Random;
  *  to the RandomWordGenerator which handles the game loop.
  */
 public class DrawingActivity extends AppCompatActivity {
+
+    String roomID;
+    RoomData roomData;
+    // Access rooms database
+    DatabaseReference room_database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
+            .getReference().child("Rooms");
 
     private Toolbar bottom_toolbar;
     private DrawerView drawer_view;
@@ -43,6 +56,28 @@ public class DrawingActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 handleDrawingIconTouched(item.getItemId());
                 return false;
+            }
+        });
+
+        // Set room Id
+        Bundle bundle = getIntent().getExtras();
+        roomID = bundle.getString("roomID");
+
+        room_database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                roomData = snapshot.child(roomID).getValue(RoomData.class);
+
+                // Should always be true when data updated - just double checking
+                if (roomData.isGameCompleted()){
+                    Intent intent = new Intent(DrawingActivity.this, RandomWordGenerator.class);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("firebase", "Error getting existing room.");
             }
         });
 
@@ -82,7 +117,7 @@ public class DrawingActivity extends AppCompatActivity {
             @Override
             public void onTick(long l) {
                 timeLeftToDraw = l;
-                int seconds = (int) (timeLeftToDraw + 1000) / 1000; //Start from 10, end in 1
+                int seconds = (int) (timeLeftToDraw + 1000) / 1000; // Start from 20, end in 1
 
                 //Update text
                 String updatedCountDownTest;
@@ -93,6 +128,7 @@ public class DrawingActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                // should technically wait for GuesserActivity
                 Intent intent = new Intent(DrawingActivity.this, RandomWordGenerator.class);
                 startActivity(intent);
             }

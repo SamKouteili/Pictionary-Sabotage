@@ -14,13 +14,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 public class SaboteurActivity extends AppCompatActivity {
+
+    String roomID;
+    RoomData roomData;
+    // Access rooms database
+    DatabaseReference room_database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
+            .getReference().child("Rooms");
 
     private Button saboteur_button;
     private DrawerView saboteur_view;
 
 
-    private long timeLeftToDraw = 20000; //10 seconds
+    private long timeLeftToDraw = 20000; // 20 seconds
     private CountDownTimer countDownTimer;
     private TextView countdownText;
 
@@ -39,9 +51,33 @@ public class SaboteurActivity extends AppCompatActivity {
         setContentView(R.layout.activity_saboteur);
 
         saboteur_view = (DrawerView) findViewById(R.id.saboteur_view);
+        saboteur_view.EraserMode();
         countdownText = findViewById(R.id.countDown_draw);
         can_sabotage = false;
         saboteur_button = (Button) findViewById(R.id.sabotage_button);
+
+        // Set room Id
+        Bundle bundle = getIntent().getExtras();
+        roomID = bundle.getString("roomID");
+
+        room_database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                roomData = snapshot.child(roomID).getValue(RoomData.class);
+
+                // Should always be true when data updated - just double checking
+                if (roomData.isGameCompleted()){
+                    Intent intent = new Intent(SaboteurActivity.this, RandomWordGenerator.class);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("firebase", "Error getting existing room.");
+            }
+        });
+
 
         saboteur_button.setOnClickListener(view -> {
 

@@ -32,7 +32,7 @@ public class DrawerView extends View {
         brush_size = 8f;
         draw_path = new Path();
         brush = new Paint();
-        brush.setColor(Color.GREEN);
+        brush.setColor(paint_color);
         brush.setAntiAlias(true);
         brush.setStrokeWidth(brush_size);
         brush.setStyle(Paint.Style.STROKE);
@@ -57,8 +57,8 @@ public class DrawerView extends View {
      * Drawing and Erasing Mode functions for DrawingActivity
      */
     public void EraserMode(){
-        brush.setColor(Color.WHITE);
-        brush.setStrokeWidth(15f);
+        brush.setColor(Color.GREEN);
+        brush.setStrokeWidth(25f);
     }
     public void DrawingMode(){
         brush.setColor(paint_color);
