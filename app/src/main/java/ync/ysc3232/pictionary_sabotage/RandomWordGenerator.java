@@ -36,6 +36,7 @@ public class RandomWordGenerator extends AppCompatActivity {
     private int num_of_words;
     private String roomId;
     private RoomData roomData;
+    private String currRole;
 
     private String[] words = {"tree", "bench", "squirrel", "hat", "nose"};
 
@@ -66,7 +67,6 @@ public class RandomWordGenerator extends AppCompatActivity {
                     Log.e("firebase", "Error getting number of words", task.getException());
                 }
                 else {
-//                    Log.d("firebase", "Got number of words " + String.valueOf(task.getResult().getValue()));
                     num_of_words = Integer.parseInt(String.valueOf(task.getResult().getValue()));
                 }
             }
@@ -75,7 +75,7 @@ public class RandomWordGenerator extends AppCompatActivity {
         //Generate random number
         int x = (int)(Math.random() * words.length);
 
-        // Read from the database
+        // Read from the database to generate random word
         database.child("random_words").child(String.valueOf(x)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -89,6 +89,7 @@ public class RandomWordGenerator extends AppCompatActivity {
                 Log.e("firebase", "Data not retrieved");
             }
         });
+
 
         finish = findViewById(R.id.finish);
         finish.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +127,8 @@ public class RandomWordGenerator extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         roomData = snapshot.child(roomId).getValue(RoomData.class);
+                        currRole = roomData.players.get(curUsr);
+                        Log.d("RandomWordGenerator", "my role is " + currRole);
                     }
 
                     @Override
@@ -133,8 +136,6 @@ public class RandomWordGenerator extends AppCompatActivity {
                         Log.e("firebase", "Could not get room in RandomWordGenerator");
                     }
                 });
-
-                String role = roomData.players.get(curUsr);
 
                 Intent intent = new Intent(RandomWordGenerator.this, SaboteurActivity.class);
                 intent.putExtra("round word", randomWord.toString().trim());

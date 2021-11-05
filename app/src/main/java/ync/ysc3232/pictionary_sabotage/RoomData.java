@@ -9,7 +9,7 @@ public class RoomData {
 
     String roomId;
     int numberOfPlayers;
-    Map<String, String> players;
+    Map<String, String> players; //Map from player to their role
     Map<String, Integer> scores;
     boolean gameStarted;
 
@@ -64,6 +64,7 @@ public class RoomData {
         this.gameStarted = gameStarted;
     }
 
+    //Do not delete these
     void addPlayer(String player, String roleId){
         if (!players.containsKey(player)) {
             numberOfPlayers += 1;
