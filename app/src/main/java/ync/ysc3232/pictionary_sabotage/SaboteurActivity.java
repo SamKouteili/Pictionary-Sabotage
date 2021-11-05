@@ -26,10 +26,10 @@ public class SaboteurActivity extends AppCompatActivity {
 
     private CountDownTimer sabotageTimer;
     private CountDownTimer waitTimer;
-    private long waitTime = 10000;
-    private long sabotageTime = 3000;
-    private EditText countdownToSabotage;
-    private EditText countdownToWait;
+    private final long waitTime = 5000;
+    private final long sabotageTime = 3000;
+    private boolean can_sabotage;
+    private final String go = "GO!";
 
 
 
@@ -40,19 +40,20 @@ public class SaboteurActivity extends AppCompatActivity {
 
         saboteur_view = (DrawerView) findViewById(R.id.saboteur_view);
         countdownText = findViewById(R.id.countDown_draw);
-
+        can_sabotage = false;
         saboteur_button = (Button) findViewById(R.id.sabotage_button);
 
-        saboteur_button.setBackgroundColor(Color.RED);
+        saboteur_button.setOnClickListener(view -> {
 
-//        String w = "10";
-//        saboteur_button.setText(w);
-//        saboteur_button.setOnClickListener(view -> {
-//
-//        });
+            if (can_sabotage){
+                saboteur_view.setCanDraw(true);
+                sabotageTimer();
+            }
+
+        });
 
         startTimer();
-//        waitTimer();
+        waitTimer();
 
     }
 
@@ -60,24 +61,20 @@ public class SaboteurActivity extends AppCompatActivity {
         waitTimer = new CountDownTimer(waitTime, 1000) {
             @Override
             public void onTick(long l) {
-                waitTime = l;
-                int seconds = (int) (waitTime + 1000) / 1000;
+                int seconds = (int) (l + 1000) / 1000;
 
                 //Update text
                 String updatedCountDown;
                 updatedCountDown = "" + seconds;
-                countdownToSabotage.setText(updatedCountDown);
                 saboteur_button.setText(updatedCountDown);
 
             }
 
             @Override
             public void onFinish() {
-
-                saboteur_view.setCanDraw(true);
-                saboteur_button.setBackgroundColor(Color.GREEN);
-                // TODO: Potentially make this reactive to first touch
-                sabotageTimer();
+                can_sabotage = true;
+                saboteur_button.setBackgroundResource(R.drawable.green_button);
+                saboteur_button.setText(go);
             }
         }.start();
     }
@@ -86,20 +83,20 @@ public class SaboteurActivity extends AppCompatActivity {
         sabotageTimer = new CountDownTimer(sabotageTime, 1000) {
             @Override
             public void onTick(long l) {
-                sabotageTime = l;
-                int seconds = (int) (sabotageTime + 1000) / 1000;
+                int seconds = (int) (l + 1000) / 1000;
 
                 //Update text
                 String updatedCountDown;
                 updatedCountDown = "" + seconds;
-                countdownToWait.setText(updatedCountDown);
+                saboteur_button.setText(updatedCountDown);
 
             }
 
             @Override
             public void onFinish() {
                 saboteur_view.setCanDraw(false);
-                saboteur_button.setBackgroundColor(Color.RED);
+                can_sabotage = false;
+                saboteur_button.setBackgroundResource(R.drawable.red_button);
                 // call waitTimer() when sabotageTimer finishes
                 waitTimer();
             }
@@ -108,7 +105,7 @@ public class SaboteurActivity extends AppCompatActivity {
 
 
     public void startTimer() {
-        countDownTimer = new CountDownTimer(timeLeftToDraw, 1000) {
+        new CountDownTimer(timeLeftToDraw, 1000) {
             @Override
             public void onTick(long l) {
                 timeLeftToDraw = l;
@@ -123,9 +120,12 @@ public class SaboteurActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                waitTimer.cancel();
+                sabotageTimer.cancel();
+
                 Intent intent = new Intent(SaboteurActivity.this, RandomWordGenerator.class);
                 startActivity(intent);
-                // TODO: Update Scores accordingly
+
             }
         }.start();
     }

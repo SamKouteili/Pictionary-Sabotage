@@ -144,6 +144,18 @@ public class RandomWordGenerator extends AppCompatActivity {
         }.start();
     }
 
+    private Intent create_intent(@NonNull String role) {
+        switch (role){
+            case "Guesser" :
+                return new Intent(RandomWordGenerator.this, GuesserActivity.class);
+            case "Saboteur" :
+                return new Intent(RandomWordGenerator.this, SaboteurActivity.class);
+            case "Drawer" :
+                return new Intent(RandomWordGenerator.this, DrawingActivity.class);
+        }
+        return null;
+    }
+
     /**
      * Stops the count down timer.
      */

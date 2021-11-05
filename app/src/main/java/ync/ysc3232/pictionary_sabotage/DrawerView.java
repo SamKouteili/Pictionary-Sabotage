@@ -32,7 +32,7 @@ public class DrawerView extends View {
         brush_size = 8f;
         draw_path = new Path();
         brush = new Paint();
-        brush.setColor(paint_color);
+        brush.setColor(Color.GREEN);
         brush.setAntiAlias(true);
         brush.setStrokeWidth(brush_size);
         brush.setStyle(Paint.Style.STROKE);
