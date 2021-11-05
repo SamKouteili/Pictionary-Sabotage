@@ -102,6 +102,7 @@ public class WaitingRoom extends AppCompatActivity {
                 rooms_database.child(roomId).setValue(roomData);
 
                 Intent intent = new Intent(WaitingRoom.this, RandomWordGenerator.class);
+                intent.putExtra("roomId", roomId);
                 startActivity(intent);
             }
         });

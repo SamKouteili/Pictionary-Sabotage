@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,8 +34,14 @@ public class RandomWordGenerator extends AppCompatActivity {
     private long timeLeftInMilliseconds = 5000;
     private Button finish;
     private int num_of_words;
+    private String roomId;
+    private RoomData roomData;
 
     private String[] words = {"tree", "bench", "squirrel", "hat", "nose"};
+
+    //Generate a random word from the string array - get words from data base
+    DatabaseReference database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
+            .getReference();
     /**
      * Instantiates round instance. Choses a random word from the word bank
      * and runs the timer.
@@ -45,13 +52,14 @@ public class RandomWordGenerator extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_random_word_generator);
 
+        //Get the room id
+        Bundle bundle = getIntent().getExtras();
+        roomId = bundle.getString("roomId");
+
         countdownText = findViewById(R.id.countdown_text);
         randomWord = findViewById(R.id.randomWord);
-        //Generate a random word from the string array - get words from data base
-        DatabaseReference rw_database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
-                .getReference().child("random_words");
 
-        rw_database.child("num_words").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        database.child("random_words").child("num_words").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (!task.isSuccessful()) {
@@ -68,7 +76,7 @@ public class RandomWordGenerator extends AppCompatActivity {
         int x = (int)(Math.random() * words.length);
 
         // Read from the database
-        rw_database.child(String.valueOf(x)).addValueEventListener(new ValueEventListener() {
+        database.child("random_words").child(String.valueOf(x)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 randomWord.setText(snapshot.getValue().toString());
@@ -113,6 +121,21 @@ public class RandomWordGenerator extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                String curUsr = getCurrentUser();
+                database.child("Rooms").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        roomData = snapshot.child(roomId).getValue(RoomData.class);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e("firebase", "Could not get room in RandomWordGenerator");
+                    }
+                });
+
+                String role = roomData.players.get(curUsr);
+
                 Intent intent = new Intent(RandomWordGenerator.this, SaboteurActivity.class);
                 intent.putExtra("round word", randomWord.toString().trim());
                 startActivity(intent);
@@ -125,5 +148,15 @@ public class RandomWordGenerator extends AppCompatActivity {
      */
     public void stopTimer() {
         countDownTimer.cancel();
+    }
+
+    public String getCurrentUser(){
+        //Get current user
+        //Remove the email @
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        String cUsrEmail = mAuth.getCurrentUser().getEmail();
+        int userAt = cUsrEmail.lastIndexOf("@");
+        String userId = cUsrEmail.substring(0, userAt);
+        return userId;
     }
 }
