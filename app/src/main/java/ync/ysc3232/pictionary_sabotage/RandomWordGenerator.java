@@ -114,6 +114,7 @@ public class RandomWordGenerator extends AppCompatActivity {
             @Override
             public void onFinish() {
                 Intent intent = new Intent(RandomWordGenerator.this, SaboteurActivity.class);
+                intent.putExtra("round word", randomWord.toString().trim());
                 startActivity(intent);
             }
         }.start();

@@ -16,7 +16,7 @@ import java.util.Locale;
 public class GuesserActivity extends AppCompatActivity {
 
     // TODO: Update expected_text with call from database
-    String expected_text = "hello";
+    String expected_text;
     EditText input_text;
     private DrawerView guesser_view;
 
@@ -33,6 +33,9 @@ public class GuesserActivity extends AppCompatActivity {
         guesser_view = (DrawerView) findViewById(R.id.drawer_view);
         countdownText = findViewById(R.id.countDown_draw);
 
+        //Set room Id
+        Bundle bundle = getIntent().getExtras();
+        expected_text = bundle.getString("round word");
 
         startTimer();
 
