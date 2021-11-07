@@ -57,7 +57,7 @@ public class WaitingRoom extends AppCompatActivity {
                 R.array.roles, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
+        // Apply the adapter to th  e spinner
         Spinner[] spinners = {spinner1, spinner2, spinner3};
 
         //All spinners begin being disabled
@@ -73,6 +73,31 @@ public class WaitingRoom extends AppCompatActivity {
         String roomId = bundle.getString("roomId");
         roomIdText.setText(roomId);
 
+
+        startGame.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+
+                // If all players chose unique roles, then update database to start game
+                if (playersChoseRoles(roomData.players)){
+                    players_chose_roles = true;
+                }
+
+                if (playersChoseRoles(roomData.players)){
+                    if (allRolesUnique(roomData.players)){
+                        startGame.setError(null);
+                        roomData.setGameStarted(true);
+                        rooms_database.child(roomId).setValue(roomData);
+                    } else {
+                        startGame.setError("Players must chose different roles!");
+                    }
+                } else {
+                    startGame.setError("All players must chose a role!");
+                }
+
+            }
+        });
+
         //Get room data and players to set the Text and Spinners on screen
         rooms_database.addValueEventListener(new ValueEventListener() {
             @Override
@@ -84,43 +109,18 @@ public class WaitingRoom extends AppCompatActivity {
                     Intent intent = new Intent(WaitingRoom.this, RandomWordGenerator.class);
                     intent.putExtra("roomID", roomId);
                     startActivity(intent);
-                    return;
-                }
-
-                int i = 0;
-                roomData = snapshot.child(roomId).getValue(RoomData.class);
-                for (DataSnapshot playerSnapShot: snapshot.child(roomId).child("players").getChildren()) {
-                    Log.d("waitingRoom", "Players include " + playerSnapShot.getKey());
-                    playersText[i].setText(playerSnapShot.getKey());
-                    spinners[i].setEnabled(true);
-                    ChoosingRoleSpinner spinnerListener = new ChoosingRoleSpinner(roomData, playerSnapShot.getKey());
-                    spinners[i].setOnItemSelectedListener(spinnerListener);
-                    i += 1;
-                }
-
-                startGame.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View view){
-
-//                        // If all players chose unique roles, then update database to start game
-//                        if (playersChoseRoles(roomData.players)){
-//                            players_chose_roles = true;
-//                        }
-
-                        if (playersChoseRoles(roomData.players)){
-                            if (allRolesUnique(roomData.players)){
-                                startGame.setError(null);
-                                roomData.setGameStarted(true);
-                                rooms_database.child(roomId).setValue(roomData);
-                            } else {
-                                startGame.setError("Players must chose different roles!");
-                            }
-                        } else {
-                            startGame.setError("All players must chose a role!");
-                        }
-
+                } else {
+                    int i = 0;
+                    roomData = snapshot.child(roomId).getValue(RoomData.class);
+                    for (DataSnapshot playerSnapShot : snapshot.child(roomId).child("players").getChildren()) {
+                        Log.d("waitingRoom", "Players include " + playerSnapShot.getKey());
+                        playersText[i].setText(playerSnapShot.getKey());
+                        spinners[i].setEnabled(true);
+                        ChoosingRoleSpinner spinnerListener = new ChoosingRoleSpinner(roomData, playerSnapShot.getKey());
+                        spinners[i].setOnItemSelectedListener(spinnerListener);
+                        i += 1;
                     }
-                });
+                }
 
             }
             @Override
@@ -129,29 +129,6 @@ public class WaitingRoom extends AppCompatActivity {
             }
         });
 
-//        startGame.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View view){
-//
-//                // If all players chose unique roles, then update database to start game
-//                if (playersChoseRoles(roomData.players)){
-//                    players_chose_roles = true;
-//                }
-//
-//                if (playersChoseRoles(roomData.players)){
-//                    if (allRolesUnique(roomData.players)){
-//                        startGame.setError(null);
-//                        roomData.setGameStarted(true);
-//                        rooms_database.child(roomId).setValue(roomData);
-//                    } else {
-//                        startGame.setError("Players must chose different roles!");
-//                    }
-//                } else {
-//                    startGame.setError("All players must chose a role!");
-//                }
-//
-//            }
-//        });
     }
 
     private boolean playersChoseRoles(Map<String, String> player_roles){

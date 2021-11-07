@@ -77,6 +77,7 @@ public class SaboteurActivity extends AppCompatActivity {
                 // Should always be true when data updated - just double checking
                 if (roundEnded()){
                     if (cur_round < 4){
+                        countDownTimer.cancel();
                         Intent intent = new Intent(SaboteurActivity.this, RandomWordGenerator.class);
                         intent.putExtra("roomID", roomID);
                         startActivity(intent);
@@ -160,7 +161,7 @@ public class SaboteurActivity extends AppCompatActivity {
 
 
     public void startTimer() {
-        new CountDownTimer(timeLeftToDraw, 1000) {
+        countDownTimer = new CountDownTimer(timeLeftToDraw, 1000) {
             @Override
             public void onTick(long l) {
                 timeLeftToDraw = l;
