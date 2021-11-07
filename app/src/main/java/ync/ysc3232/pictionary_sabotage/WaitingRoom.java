@@ -21,14 +21,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import java.util.Map;
 
 public class WaitingRoom extends AppCompatActivity {
 
     RoomData roomData;
+    boolean players_chose_roles;
 
     //Access rooms database
     DatabaseReference rooms_database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
             .getReference().child("Rooms");
+
+    String[] roles = {"Undecided", "Guesser", "Saboteur", "Drawer"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,19 +43,19 @@ public class WaitingRoom extends AppCompatActivity {
         TextView player1 = findViewById(R.id.player1);
         TextView player2 = findViewById(R.id.player2);
         TextView player3 = findViewById(R.id.player3);
-        TextView player4 = findViewById(R.id.player4);
-        TextView[] playersText = {player1, player2, player3, player4};
+//        TextView player4 = findViewById(R.id.player4);
+        TextView[] playersText = {player1, player2, player3};
 
         Spinner spinner1 = (Spinner) findViewById(R.id.chooseRole1);
         Spinner spinner2 = (Spinner) findViewById(R.id.chooseRole2);
         Spinner spinner3 = (Spinner) findViewById(R.id.chooseRole3);
-        Spinner spinner4 = (Spinner) findViewById(R.id.chooseRole4);
+//        Spinner spinner4 = (Spinner) findViewById(R.id.chooseRole4);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.roles, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
-        Spinner[] spinners = {spinner1, spinner2, spinner3, spinner4};
+        Spinner[] spinners = {spinner1, spinner2, spinner3};
 
         //All spinners begin being disabled
         for (Spinner spinner: spinners) {
@@ -59,16 +63,19 @@ public class WaitingRoom extends AppCompatActivity {
             spinner.setEnabled(false);
         }
 
+        // players_chose_roles = false;
+
         //Set room Id
         Bundle bundle = getIntent().getExtras();
         String roomId = bundle.getString("roomId");
-        roomIdText.setText(bundle.getString("roomId"));
+        roomIdText.setText(roomId);
 
         //Get room data and players to set the Text and Spinners on screen
         rooms_database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 roomData = snapshot.child(roomId).getValue(RoomData.class);
+
 
                 //If the data update says game has started - move to next page
                 if (roomData.isGameStarted()) {
@@ -98,11 +105,37 @@ public class WaitingRoom extends AppCompatActivity {
         startGame.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
+                // startGame.setError(null);
                 //Push all roles onto the data base
-                roomData.setGameStarted(true);
-                rooms_database.child(roomId).setValue(roomData);
-                //We do not set Intent here, it is done on line 75 onDataChange
+                if (playersChoseRoles(roomData.players)){
+                    players_chose_roles = true;
+                }
+
+                if (players_chose_roles)    {
+                    startGame.setError(null);
+                    roomData.setGameStarted(true);
+                    rooms_database.child(roomId).setValue(roomData);
+                    //We do not set Intent here, it is done on line 75 onDataChange
+                } else {
+                    startGame.setError("All players must chose a role!");
+                }
+
             }
         });
     }
+
+    private boolean playersChoseRoles(Map<String, String> player_roles){
+        for (Map.Entry<String, String> role : player_roles.entrySet()) {
+            Log.d("Player roles allocated", role.getValue());
+            if (role.getValue().equals("Undecided")){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void setUndecidedRole(RoomData room){
+
+    }
+
 }

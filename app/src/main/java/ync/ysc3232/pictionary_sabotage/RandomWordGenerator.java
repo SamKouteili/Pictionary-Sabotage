@@ -39,6 +39,7 @@ public class RandomWordGenerator extends AppCompatActivity {
     private String currRole;
     private String randomWordString;
 
+
     private String[] words = {"tree", "bench", "squirrel", "hat", "nose"};
 
     //Generate a random word from the string array - get words from data base
@@ -126,17 +127,13 @@ public class RandomWordGenerator extends AppCompatActivity {
             public void onFinish() {
                 String curUsr = getCurrentUser();
 
-//                // Need to ensure every game starts with a false completed field
-//                roomData.setGameCompleted(false);
-//                database.child(roomId).setValue(roomData);
-
-
                 database.child("Rooms").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         roomData = snapshot.child(roomId).getValue(RoomData.class);
                         currRole = roomData.players.get(curUsr);
-                        Intent intent = new Intent(RandomWordGenerator.this, GuesserActivity.class);
+
+                        Intent intent = assign_intent(currRole);
                         intent.putExtra("round word", randomWordString);
                         intent.putExtra("round num", roomData.getRoundNum());
                         intent.putExtra("roomID", roomId);

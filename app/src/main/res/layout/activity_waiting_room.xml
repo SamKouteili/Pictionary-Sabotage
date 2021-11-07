@@ -11,7 +11,7 @@
         android:layout_width="466dp"
         android:layout_height="780dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/player4"
+        app:layout_constraintBottom_toTopOf="@+id/player3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.781"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,6 +56,8 @@
         android:text="@string/start"
         android:textAlignment="center"
         android:textSize="20sp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.482"
@@ -102,18 +104,18 @@
         app:layout_constraintTop_toBottomOf="@+id/players"
         tools:layout_editor_absoluteX="79dp" />
 
-    <TextView
-        android:id="@+id/player4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="92dp"
-        android:fontFamily="casual"
-        android:text="Waiting..."
-        android:textColor="@color/purple_500"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/player1"
-        tools:layout_editor_absoluteX="79dp" />
+<!--    <TextView-->
+<!--        android:id="@+id/player4"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="92dp"-->
+<!--        android:fontFamily="casual"-->
+<!--        android:text="Waiting..."-->
+<!--        android:textColor="@color/purple_500"-->
+<!--        android:textSize="20sp"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/player1"-->
+<!--        tools:layout_editor_absoluteX="79dp" />-->
 
     <TextView
         android:id="@+id/player2"
@@ -179,17 +181,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/startGame" />
 
-    <Spinner
-        android:id="@+id/chooseRole4"
-        android:layout_width="149dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="244dp"
-        android:prompt="@string/chooseRole"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.694"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/startGame" />
+<!--    <Spinner-->
+<!--        android:id="@+id/chooseRole4"-->
+<!--        android:layout_width="149dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:layout_marginTop="244dp"-->
+<!--        android:prompt="@string/chooseRole"-->
+<!--        android:textColor="@color/black"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.694"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/startGame" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
