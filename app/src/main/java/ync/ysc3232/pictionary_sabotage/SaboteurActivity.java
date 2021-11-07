@@ -14,11 +14,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.Random;
 
 public class SaboteurActivity extends AppCompatActivity {
 
@@ -51,6 +54,8 @@ public class SaboteurActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saboteur);
+
+        Log.d("Classes", getCurrentUser() + " is in SaboteurActivity");
 
         saboteur_view = (DrawerView) findViewById(R.id.saboteur_view);
         saboteur_view.EraserMode();
@@ -178,6 +183,7 @@ public class SaboteurActivity extends AppCompatActivity {
                 }
 
                 Intent intent = new Intent(SaboteurActivity.this, RandomWordGenerator.class);
+                intent.putExtra("roomID", roomID);
                 startActivity(intent);
 
             }
@@ -188,4 +194,13 @@ public class SaboteurActivity extends AppCompatActivity {
         return (roomData.getRoundNum() == cur_round + 1);
     }
 
+    public String getCurrentUser(){
+        //Get current user
+        //Remove the email @
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        String cUsrEmail = mAuth.getCurrentUser().getEmail();
+        int userAt = cUsrEmail.lastIndexOf("@");
+        String userId = cUsrEmail.substring(0, userAt);
+        return userId;
+    }
 }

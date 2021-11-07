@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,6 +44,8 @@ public class GuesserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guesser);
+
+        Log.d("Classes", getCurrentUser() + " is in GuesserActivity");
 
         input_text = findViewById(R.id.GuesserInput);
         guesser_view = (DrawerView) findViewById(R.id.drawer_view);
@@ -163,6 +166,16 @@ public class GuesserActivity extends AppCompatActivity {
                 roomData.scores.put(id, count + 1);
             }
         }
+    }
+
+    public String getCurrentUser(){
+        //Get current user
+        //Remove the email @
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        String cUsrEmail = mAuth.getCurrentUser().getEmail();
+        int userAt = cUsrEmail.lastIndexOf("@");
+        String userId = cUsrEmail.substring(0, userAt);
+        return userId;
     }
 
 }

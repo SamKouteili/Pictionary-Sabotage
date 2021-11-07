@@ -52,6 +52,7 @@ public class RandomWordGenerator extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_random_word_generator);
+        Log.d("Classes", getCurrentUser() + " is in RamdomWordGenerator");
 
         //Get the room id
         Bundle bundle = getIntent().getExtras();
@@ -84,24 +85,6 @@ public class RandomWordGenerator extends AppCompatActivity {
             }
         });
 
-//        //Generate random number
-//        int x = (int)(Math.random() * 10);
-//
-//        // Read from the database to generate random word
-//        database.child("random_words").child(String.valueOf(x)).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                randomWord.setText(snapshot.getValue().toString());
-//                randomWordString = snapshot.getValue().toString();
-//
-//                //Only start time when word is generated
-//                startTimer();
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                Log.e("firebase", "Data not retrieved");
-//            }
-//        });
         finish = findViewById(R.id.finish);
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,7 +168,7 @@ public class RandomWordGenerator extends AppCompatActivity {
         countDownTimer.cancel();
     }
 
-    public String   getCurrentUser(){
+    public String getCurrentUser(){
         //Get current user
         //Remove the email @
         FirebaseAuth mAuth = FirebaseAuth.getInstance();

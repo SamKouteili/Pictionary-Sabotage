@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -45,6 +46,9 @@ public class DrawingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawing);
+
+
+        Log.d("Classes", getCurrentUser() + " is in DrawingActivity");
 
         drawer_view = (DrawerView)findViewById(R.id.drawer_view);
         drawer_view.setCanDraw(true);
@@ -139,6 +143,7 @@ public class DrawingActivity extends AppCompatActivity {
             public void onFinish() {
                 // should technically wait for GuesserActivity
                 Intent intent = new Intent(DrawingActivity.this, RandomWordGenerator.class);
+                intent.putExtra("roomID", roomID);
                 startActivity(intent);
             }
         }.start();
@@ -146,5 +151,15 @@ public class DrawingActivity extends AppCompatActivity {
 
     private boolean roundEnded(){
         return (roomData.getRoundNum() == cur_round + 1);
+    }
+
+    public String getCurrentUser(){
+        //Get current user
+        //Remove the email @
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        String cUsrEmail = mAuth.getCurrentUser().getEmail();
+        int userAt = cUsrEmail.lastIndexOf("@");
+        String userId = cUsrEmail.substring(0, userAt);
+        return userId;
     }
 }
