@@ -29,6 +29,7 @@ public class DrawingActivity extends AppCompatActivity {
 
     String roomID;
     RoomData roomData;
+    private int cur_round;
     // Access rooms database
     DatabaseReference room_database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
             .getReference().child("Rooms");
@@ -62,6 +63,7 @@ public class DrawingActivity extends AppCompatActivity {
         // Set room Id
         Bundle bundle = getIntent().getExtras();
         roomID = bundle.getString("roomID");
+        cur_round = bundle.getInt("round num");
 
         room_database.addValueEventListener(new ValueEventListener() {
             @Override
@@ -69,7 +71,7 @@ public class DrawingActivity extends AppCompatActivity {
                 roomData = snapshot.child(roomID).getValue(RoomData.class);
 
                 // Should always be true when data updated - just double checking
-                if (roomData.isGameCompleted()){
+                if (roomData.getRoundNum() == cur_round + 1){
                     Intent intent = new Intent(DrawingActivity.this, RandomWordGenerator.class);
                     startActivity(intent);
                 }

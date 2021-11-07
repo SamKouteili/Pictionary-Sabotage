@@ -26,6 +26,7 @@ public class GuesserActivity extends AppCompatActivity {
 
     String roomID;
     RoomData roomData;
+    private int cur_round;
     // Access rooms database
     DatabaseReference room_database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
             .getReference().child("Rooms");
@@ -49,17 +50,17 @@ public class GuesserActivity extends AppCompatActivity {
 
         // Set room Id
         Bundle bundle = getIntent().getExtras();
-//        expected_text = bundle.getString("round word");
-        expected_text = "hello";
+        expected_text = bundle.getString("round word");
+        // expected_text = "hello";
         roomID = bundle.getString("roomID");
+        cur_round = bundle.getInt("round num");
 
         room_database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 roomData = snapshot.child(roomID).getValue(RoomData.class);
 
-                // Should always be true when data updated - just double checking
-                if (roomData.isGameCompleted()){
+                if (roomData.getRoundNum() == cur_round + 1){
                     Intent intent = new Intent(GuesserActivity.this, RandomWordGenerator.class);
                     startActivity(intent);
                 }
@@ -90,8 +91,9 @@ public class GuesserActivity extends AppCompatActivity {
                     roomData.scores.put(id, count + 1);
                 }
             }
-            // Set Game ended to true (necessary for Drawer and Saboteur)
-            roomData.setGameCompleted(true);
+
+            // This round complete, begin process to go to next round
+            roomData.incrementRoundNum();
 
             countDownTimer.cancel();
 
@@ -127,7 +129,7 @@ public class GuesserActivity extends AppCompatActivity {
                 }
 
                 // Set Game ended to true (necessary for Drawer and Saboteur)
-                roomData.setGameCompleted(true);
+                roomData.incrementRoundNum();
 
                 // Update Database (also acts as ping)
                 room_database.child(roomID).setValue(roomData);

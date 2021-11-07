@@ -12,7 +12,7 @@ public class RoomData {
     Map<String, String> players; //Map from player to their role
     Map<String, Integer> scores;
     boolean gameStarted;
-    boolean gameCompleted;
+    int roundNum;
 
     public RoomData(){}
 
@@ -22,7 +22,7 @@ public class RoomData {
         this.players = new HashMap<>();
         this.scores = new HashMap<>();
         this.gameStarted = false;
-        this.gameCompleted = false;
+        this.roundNum = 0;
 //        String[] roles = {"Undecided", "Guesser", "Saboteur", "Drawer"};
     }
 
@@ -66,12 +66,16 @@ public class RoomData {
         this.gameStarted = gameStarted;
     }
 
-    public boolean isGameCompleted() {
-        return gameCompleted;
+    public int getRoundNum() {
+        return roundNum;
     }
 
-    public void setGameCompleted(boolean gameCompleted) {
-        this.gameCompleted = gameCompleted;
+    public void setRoundNum(int roundNum) {
+        this.roundNum = roundNum;
+    }
+
+    public void incrementRoundNum(){
+        this.roundNum++;
     }
 
     //Do not delete these

@@ -37,6 +37,7 @@ public class RandomWordGenerator extends AppCompatActivity {
     private String roomId;
     private RoomData roomData;
     private String currRole;
+    private String randomWordString;
 
     private String[] words = {"tree", "bench", "squirrel", "hat", "nose"};
 
@@ -80,6 +81,7 @@ public class RandomWordGenerator extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 randomWord.setText(snapshot.getValue().toString());
+                randomWordString = snapshot.getValue().toString();
 
                 //Only start time when word is generated
                 startTimer();
@@ -123,6 +125,12 @@ public class RandomWordGenerator extends AppCompatActivity {
             @Override
             public void onFinish() {
                 String curUsr = getCurrentUser();
+
+//                // Need to ensure every game starts with a false completed field
+//                roomData.setGameCompleted(false);
+//                database.child(roomId).setValue(roomData);
+
+
                 database.child("Rooms").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -138,7 +146,8 @@ public class RandomWordGenerator extends AppCompatActivity {
                 });
 
                 Intent intent = new Intent(RandomWordGenerator.this, GuesserActivity.class);
-                intent.putExtra("round word", randomWord.toString().trim());
+                intent.putExtra("round word", randomWordString);
+                intent.putExtra("round num", roomData.getRoundNum());
                 intent.putExtra("roomID", roomId);
                 startActivity(intent);
             }
