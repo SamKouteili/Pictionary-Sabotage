@@ -1,11 +1,19 @@
 package ync.ysc3232.pictionary_sabotage;
 
+import android.view.View;
+
 import androidx.annotation.ContentView;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
-import androidx.test.espresso.Espresso;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static org.hamcrest.core.AllOf.allOf;
+import static androidx.test.espresso.intent.matcher.ComponentNameMatchers.hasShortClassName;
 
 
 import org.junit.After;
@@ -31,8 +39,11 @@ public class IntentIntrsumentedTest {
         Intents.release();
     }
 
-    @Test void verifyPlayLeadsToRoom() {
-//        Espresso.onView(R.id.);
+    @Test
+    public void verifyPlayLeadsToRoom() {
+        onView(withId(R.id.startGameButton)).perform(click());
+
+        intended(hasComponent(hasShortClassName(".Room")));
 
 
 //        // Types a message into a EditText element.
