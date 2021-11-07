@@ -91,6 +91,18 @@ public class Room extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         roomData = snapshot.child(roomId).getValue(RoomData.class);
+
+                        if (roomData == null) {
+                            Toast.makeText(Room.this, "Invalid Room Number", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        roomData.addPlayer(getCurrentUser(), "Undecided");
+                        room_database.child(roomId).setValue(roomData);
+
+                        Intent intent = new Intent(Room.this, WaitingRoom.class);
+                        intent.putExtra("roomId", roomId);
+                        startActivity(intent);
                     }
 
                     @Override
@@ -99,18 +111,6 @@ public class Room extends AppCompatActivity {
                         Toast.makeText(Room.this, "Invalid Room Number", Toast.LENGTH_SHORT).show();
                     }
                 });
-
-                if (roomData == null) {
-                    Toast.makeText(Room.this, "Invalid Room Number", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                roomData.addPlayer(getCurrentUser(), "Undecided");
-                room_database.child(roomId).setValue(roomData);
-
-                Intent intent = new Intent(Room.this, WaitingRoom.class);
-                intent.putExtra("roomId", roomId);
-                startActivity(intent);
             }
 
         });
