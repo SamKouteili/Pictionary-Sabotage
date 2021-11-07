@@ -59,7 +59,6 @@ public class RandomWordGenerator extends AppCompatActivity {
                     Log.e("firebase", "Error getting number of words", task.getException());
                 }
                 else {
-//                    Log.d("firebase", "Got number of words " + String.valueOf(task.getResult().getValue()));
                     num_of_words = Integer.parseInt(String.valueOf(task.getResult().getValue()));
                 }
             }
