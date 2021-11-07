@@ -59,11 +59,34 @@ public class PodiumActivity extends AppCompatActivity {
         TextView sndPos = findViewById(R.id.secondPos);
         TextView trdPos = findViewById(R.id.thirdPos);
 
-
         rooms_database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 roomData = snapshot.child(roomId).getValue(RoomData.class);
+
+                for (String id : roomData.players.keySet()) {
+                    String role = roomData.players.get(id);
+                    int score = roomData.scores.get(id);
+                    PlayerDbModel p = new PlayerDbModel(id, role, score);
+                    allPlayers.add(p);
+                }
+
+                if (allPlayers.isEmpty()) {
+                    Log.e("Fetching Podium Data", "Podium Data empty");
+                }
+                allPlayers.sort(Comparator.comparing(PlayerDbModel::getScore));
+                // Set the values to the winners
+                String nameAndPoints1 = allPlayers.get(0).getPlayerName() +
+                        "\n" + allPlayers.get(0).getScore() + " pts.";
+//                String nameAndPoints2 = allPlayers.get(1).getPlayerName() +
+//                        "\n" + allPlayers.get(1).getScore() + " pts.";
+//                String nameAndPoints3 = allPlayers.get(2).getPlayerName() +
+//                        "\n" + allPlayers.get(2).getScore() + " pts.";
+
+                fstPos.setText(nameAndPoints1);
+//                sndPos.setText(nameAndPoints2);
+//                trdPos.setText(nameAndPoints3);
+
             }
 
             @Override
@@ -72,21 +95,6 @@ public class PodiumActivity extends AppCompatActivity {
             }
         });
 
-        fetchPlayers();
-
-        allPlayers.sort(Comparator.comparing(PlayerDbModel::getScore));
-        // Set the values to the winners
-        String nameAndPoints1 = allPlayers.get(0).getPlayerName() +
-                                "\n" + allPlayers.get(0).getScore() + " pts.";
-        String nameAndPoints2 = allPlayers.get(1).getPlayerName() +
-                "\n" + allPlayers.get(1).getScore() + " pts.";
-        String nameAndPoints3 = allPlayers.get(2).getPlayerName() +
-                "\n" + allPlayers.get(2).getScore() + " pts.";
-
-        fstPos.setText(nameAndPoints1);
-        sndPos.setText(nameAndPoints2);
-        trdPos.setText(nameAndPoints3);
-
 
         returnToMenuButton.setOnClickListener(view -> {
             Intent intent = new Intent(PodiumActivity.this, MainActivity.class);
@@ -94,16 +102,31 @@ public class PodiumActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Fetches the players from the database, puts the values into the @allPlayers field.
-     */
-    private void fetchPlayers() {
-        for (String id : roomData.players.keySet()) {
-            String role = roomData.players.get(id);
-            int score = roomData.scores.get(id);
-            PlayerDbModel p = new PlayerDbModel(id, role, score);
-            allPlayers.add(p);
-        }
-    }
-
 }
+
+//    /**
+//     * Fetches the players from the database, puts the values into the @allPlayers field.
+//     */
+//    private void fetchPlayers() {
+//        rooms_database.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                roomData = snapshot.child(roomId).getValue(RoomData.class);
+//
+//                for (String id : roomData.players.keySet()) {
+//                    String role = roomData.players.get(id);
+//                    int score = roomData.scores.get(id);
+//                    PlayerDbModel p = new PlayerDbModel(id, role, score);
+//                    allPlayers.add(p);
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                Log.e("firebase", "Error getting existing room.");
+//            }
+//        });
+//    }
+//
+//}

@@ -83,7 +83,7 @@ public class WaitingRoom extends AppCompatActivity {
                 //If the data update says game has started - move to next page
                 if (roomData.isGameStarted()) {
                     Intent intent = new Intent(WaitingRoom.this, RandomWordGenerator.class);
-                    intent.putExtra("roomId", roomId);
+                    intent.putExtra("roomID", roomId);
                     startActivity(intent);
                     return;
                 }

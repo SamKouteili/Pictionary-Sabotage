@@ -68,9 +68,16 @@ public class SaboteurActivity extends AppCompatActivity {
                 roomData = snapshot.child(roomID).getValue(RoomData.class);
 
                 // Should always be true when data updated - just double checking
-                if (roomData.getRoundNum() == cur_round + 1){
-                    Intent intent = new Intent(SaboteurActivity.this, RandomWordGenerator.class);
-                    startActivity(intent);
+                if (roundEnded()){
+                    if (cur_round < 4){
+                        Intent intent = new Intent(SaboteurActivity.this, RandomWordGenerator.class);
+                        intent.putExtra("roomID", roomID);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(SaboteurActivity.this, PodiumActivity.class);;
+                        intent.putExtra("roomID", roomID);
+                        startActivity(intent);
+                    }
                 }
             }
 
@@ -166,6 +173,10 @@ public class SaboteurActivity extends AppCompatActivity {
 
             }
         }.start();
+    }
+
+    private boolean roundEnded(){
+        return (roomData.getRoundNum() == cur_round + 1);
     }
 
 }

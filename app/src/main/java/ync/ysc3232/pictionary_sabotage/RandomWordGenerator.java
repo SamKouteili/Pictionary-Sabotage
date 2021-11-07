@@ -57,7 +57,7 @@ public class RandomWordGenerator extends AppCompatActivity {
 
         //Get the room id
         Bundle bundle = getIntent().getExtras();
-        roomId = bundle.getString("roomId");
+        roomId = bundle.getString("roomID");
 
         countdownText = findViewById(R.id.countdown_text);
         randomWord = findViewById(R.id.randomWord);
@@ -69,13 +69,14 @@ public class RandomWordGenerator extends AppCompatActivity {
                     Log.e("firebase", "Error getting number of words", task.getException());
                 }
                 else {
+                    // TODO: fix; currently returns 0
                     num_of_words = Integer.parseInt(String.valueOf(task.getResult().getValue()));
                 }
             }
         });
 
         //Generate random number
-        int x = (int)(Math.random() * words.length);
+        int x = (int)(Math.random() * 10);
 
         // Read from the database to generate random word
         database.child("random_words").child(String.valueOf(x)).addValueEventListener(new ValueEventListener() {
@@ -131,6 +132,9 @@ public class RandomWordGenerator extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         roomData = snapshot.child(roomId).getValue(RoomData.class);
+                        if (curUsr == null){
+                            Log.d("usrID", "usrID empty???");
+                        }
                         currRole = roomData.players.get(curUsr);
 
                         Intent intent = assign_intent(currRole);
