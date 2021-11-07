@@ -29,13 +29,11 @@ import java.util.Map;
 public class WaitingRoom extends AppCompatActivity {
 
     RoomData roomData;
-
     //Access rooms database
     DatabaseReference rooms_database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
             .getReference().child("Rooms");
 
-    String[] roles = {"Undecided", "Guesser", "Saboteur", "Drawer"};
-    boolean players_chose_roles;
+//    String[] roles = {"Undecided", "Guesser", "Saboteur", "Drawer"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,27 +44,24 @@ public class WaitingRoom extends AppCompatActivity {
         TextView player1 = findViewById(R.id.player1);
         TextView player2 = findViewById(R.id.player2);
         TextView player3 = findViewById(R.id.player3);
-//        TextView player4 = findViewById(R.id.player4);
         TextView[] playersText = {player1, player2, player3};
 
         Spinner spinner1 = (Spinner) findViewById(R.id.chooseRole1);
         Spinner spinner2 = (Spinner) findViewById(R.id.chooseRole2);
         Spinner spinner3 = (Spinner) findViewById(R.id.chooseRole3);
-//        Spinner spinner4 = (Spinner) findViewById(R.id.chooseRole4);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.roles, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to th  e spinner
+        // Apply the adapter to the spinner
         Spinner[] spinners = {spinner1, spinner2, spinner3};
 
-        //All spinners begin being disabled
+        // All spinners begin being disabled
+        // TODO: Maybe they should all begin as "Undecided"
         for (Spinner spinner: spinners) {
             spinner.setAdapter(adapter);
             spinner.setEnabled(false);
         }
-
-        // players_chose_roles = false;
 
         //Set room Id
         Bundle bundle = getIntent().getExtras();
@@ -79,9 +74,6 @@ public class WaitingRoom extends AppCompatActivity {
             public void onClick(View view){
 
                 // If all players chose unique roles, then update database to start game
-                if (playersChoseRoles(roomData.players)){
-                    players_chose_roles = true;
-                }
 
                 if (playersChoseRoles(roomData.players)){
                     if (allRolesUnique(roomData.players)){

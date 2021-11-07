@@ -69,7 +69,11 @@ public class RandomWordGenerator extends AppCompatActivity {
                 int round = roomData.getRoundNum();
                 if (round < 5) {
                     randomWordString = roomData.fiveWords.get(round);
-                    randomWord.setText(randomWordString);
+                    if (roomData.players.get(getCurrentUser()).equals("Guesser")){
+                        randomWord.setText(R.string.guesserText);
+                    } else {
+                        randomWord.setText(randomWordString);
+                    }
 
                     //Only start time when word is generated
                     if (!timer_started){

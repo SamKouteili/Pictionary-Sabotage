@@ -18,6 +18,8 @@
 
     <!--    Random Word Generator Strings -->
     <string name="finish">Back To Main Menu</string>
+    <string name="guesserText">Guess that Word</string>
+
 
     <!--    Podium Menu Strings-->
     <string name="return_to_menu">MAIN MENU</string>
