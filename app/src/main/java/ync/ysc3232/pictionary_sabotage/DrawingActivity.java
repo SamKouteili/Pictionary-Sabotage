@@ -76,6 +76,9 @@ public class DrawingActivity extends AppCompatActivity {
 
                 // Should always be true when data updated - just double checking
                 if (roundEnded()){
+                    if (countDownTimer != null){
+                        countDownTimer.cancel();
+                    }
                     if (cur_round < 4){
                         Intent intent = new Intent(DrawingActivity.this, RandomWordGenerator.class);
                         intent.putExtra("roomID", roomID);

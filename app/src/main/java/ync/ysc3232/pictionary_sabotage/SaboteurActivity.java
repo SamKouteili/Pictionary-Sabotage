@@ -76,13 +76,14 @@ public class SaboteurActivity extends AppCompatActivity {
 
                 // Should always be true when data updated - just double checking
                 if (roundEnded()){
-                    if (cur_round < 4){
+                    if (countDownTimer != null){
                         countDownTimer.cancel();
+                    }
+                    if (cur_round < 4){
                         Intent intent = new Intent(SaboteurActivity.this, RandomWordGenerator.class);
                         intent.putExtra("roomID", roomID);
                         startActivity(intent);
                     } else {
-                        countDownTimer.cancel();
                         Intent intent = new Intent(SaboteurActivity.this, PodiumActivity.class);;
                         intent.putExtra("roomID", roomID);
                         startActivity(intent);
