@@ -173,7 +173,7 @@ public class RandomWordGenerator extends AppCompatActivity {
         countDownTimer.cancel();
     }
 
-    public String getCurrentUser(){
+    public String   getCurrentUser(){
         //Get current user
         //Remove the email @
         FirebaseAuth mAuth = FirebaseAuth.getInstance();

@@ -21,18 +21,21 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class WaitingRoom extends AppCompatActivity {
 
     RoomData roomData;
-    boolean players_chose_roles;
 
     //Access rooms database
     DatabaseReference rooms_database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
             .getReference().child("Rooms");
 
     String[] roles = {"Undecided", "Guesser", "Saboteur", "Drawer"};
+    boolean players_chose_roles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,17 +108,20 @@ public class WaitingRoom extends AppCompatActivity {
         startGame.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                // startGame.setError(null);
-                //Push all roles onto the data base
+
+                // If all players chose unique roles, then update database to start game
                 if (playersChoseRoles(roomData.players)){
                     players_chose_roles = true;
                 }
 
-                if (players_chose_roles)    {
-                    startGame.setError(null);
-                    roomData.setGameStarted(true);
-                    rooms_database.child(roomId).setValue(roomData);
-                    //We do not set Intent here, it is done on line 75 onDataChange
+                if (players_chose_roles){
+                    if (allRolesUnique(roomData.players)){
+                        startGame.setError(null);
+                        roomData.setGameStarted(true);
+                        rooms_database.child(roomId).setValue(roomData);
+                    } else {
+                        startGame.setError("Players must chose different roles!");
+                    }
                 } else {
                     startGame.setError("All players must chose a role!");
                 }
@@ -126,7 +132,7 @@ public class WaitingRoom extends AppCompatActivity {
 
     private boolean playersChoseRoles(Map<String, String> player_roles){
         for (Map.Entry<String, String> role : player_roles.entrySet()) {
-            Log.d("Player roles allocated", role.getValue());
+            // Log.d("Player roles allocated", role.getValue());
             if (role.getValue().equals("Undecided")){
                 return false;
             }
@@ -134,8 +140,17 @@ public class WaitingRoom extends AppCompatActivity {
         return true;
     }
 
-    private void setUndecidedRole(RoomData room){
-
+    private boolean allRolesUnique(Map<String, String> player_roles){
+        ArrayList<String> allocated_roles = new ArrayList<String>();
+        for (Map.Entry<String, String> role : player_roles.entrySet()) {
+            // Log.d("Player roles allocated", role.getValue());
+            if (allocated_roles.contains(role.getValue())){
+                return false;
+            } else {
+                allocated_roles.add(role.getValue());
+            }
+        }
+        return true;
     }
 
 }

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -28,10 +29,17 @@ import java.util.Comparator;
  */
 public class PodiumActivity extends AppCompatActivity {
 
+    RoomData roomData;
+
+    //Access rooms database
+    DatabaseReference rooms_database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
+            .getReference().child("Rooms");
+
+
     //Default values for the winners
     private final PlayerDbModel sample = new PlayerDbModel("TestPlayer", "Drawer", 42);
-    private ArrayList<PlayerDbModel> allPlayers = new ArrayList<>(Arrays.asList(sample,sample,sample));
-    private String roomId = "O1";
+    private ArrayList<PlayerDbModel> allPlayers = new ArrayList<>();
+    private String roomId;
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -40,14 +48,32 @@ public class PodiumActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_podium);
 
-        Button button = findViewById(R.id.returnToMenuButton);
+        Bundle bundle = getIntent().getExtras();
+        roomId = bundle.getString("roomID");
+
+
+        Button returnToMenuButton = findViewById(R.id.returnToMenuButton);
 
         //Fetch the corresponding layout text boxes
         TextView fstPos = findViewById(R.id.firstPos);
         TextView sndPos = findViewById(R.id.secondPos);
         TextView trdPos = findViewById(R.id.thirdPos);
 
+
+        rooms_database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                roomData = snapshot.child(roomId).getValue(RoomData.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("firebase", "Error getting existing room.");
+            }
+        });
+
         fetchPlayers();
+
         allPlayers.sort(Comparator.comparing(PlayerDbModel::getScore));
         // Set the values to the winners
         String nameAndPoints1 = allPlayers.get(0).getPlayerName() +
@@ -62,43 +88,22 @@ public class PodiumActivity extends AppCompatActivity {
         trdPos.setText(nameAndPoints3);
 
 
-        button.setOnClickListener(view -> {
+        returnToMenuButton.setOnClickListener(view -> {
             Intent intent = new Intent(PodiumActivity.this, MainActivity.class);
             startActivity(intent);
         });
     }
 
     /**
-     * Sets the room ID to the current game id.
-     * @param roomId - id of the room
-     */
-    public void setRoomId(String roomId){
-        this.roomId = roomId;
-    }
-
-    /**
      * Fetches the players from the database, puts the values into the @allPlayers field.
      */
-    private void fetchPlayers(){
-        DatabaseReference rw_database = FirebaseDatabase
-                .getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
-                .getReference().child("Rooms").child(roomId);
-
-        rw_database.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                allPlayers = new ArrayList<>();
-                for (DataSnapshot snap : snapshot.getChildren()){
-                    PlayerDbModel player = snap.getValue(PlayerDbModel.class);
-                    allPlayers.add(player);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+    private void fetchPlayers() {
+        for (String id : roomData.players.keySet()) {
+            String role = roomData.players.get(id);
+            int score = roomData.scores.get(id);
+            PlayerDbModel p = new PlayerDbModel(id, role, score);
+            allPlayers.add(p);
+        }
     }
 
 }

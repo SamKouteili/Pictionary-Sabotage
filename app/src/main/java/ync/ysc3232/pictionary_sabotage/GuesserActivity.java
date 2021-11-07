@@ -60,10 +60,16 @@ public class GuesserActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 roomData = snapshot.child(roomID).getValue(RoomData.class);
 
-                if (roomData.getRoundNum() == cur_round + 1){
-                    Intent intent = new Intent(GuesserActivity.this, RandomWordGenerator.class);
-                    intent.putExtra("roomId", roomID);
-                    startActivity(intent);
+                if (roundEnded()){
+                    if (roomData.getRoundNum() < 5){
+                        Intent intent = new Intent(GuesserActivity.this, RandomWordGenerator.class);
+                        intent.putExtra("roomID", roomID);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(GuesserActivity.this, PodiumActivity.class);;
+                        intent.putExtra("roomID", roomID);
+                        startActivity(intent);
+                    }
                 }
             }
 
@@ -85,13 +91,7 @@ public class GuesserActivity extends AppCompatActivity {
         if (t.equals(expected_text.toUpperCase())){
             input_text.setError(null);
 
-            for (String id : roomData.players.keySet()) {
-                // Update score for Drawer and Guesser
-                if (!roomData.players.get(id).equals("Saboteur")) {
-                    int count = roomData.scores.containsKey(id) ? roomData.scores.get(id) : 0;
-                    roomData.scores.put(id, count + 1);
-                }
-            }
+            updateGuesserAndDrawerScore();
 
             // This round complete, begin process to go to next round
             roomData.incrementRoundNum();
@@ -121,13 +121,7 @@ public class GuesserActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
 
-                for (String id : roomData.players.keySet()) {
-                    // Update score for Drawer and Guesser
-                    if (roomData.players.get(id).equals("Saboteur")) {
-                        int count = roomData.scores.containsKey(id) ? roomData.scores.get(id) : 0;
-                        roomData.scores.put(id, count + 1);
-                    }
-                }
+                updateSaboteurScore();
 
                 // Set Game ended to true (necessary for Drawer and Saboteur)
                 roomData.incrementRoundNum();
@@ -137,6 +131,39 @@ public class GuesserActivity extends AppCompatActivity {
 
             }
         }.start();
+    }
+
+    /**
+     * If the round number has been incremented, this signals the end of the round
+     */
+    private boolean roundEnded(){
+        return (roomData.getRoundNum() == cur_round + 1);
+    }
+
+    /**
+     * If we reach the end of the main timer, update the score for the saboteur
+     */
+    private void updateSaboteurScore(){
+        // Round ended and word not guessed; Update score for Saboteur
+        for (String id : roomData.players.keySet()) {
+            if (roomData.players.get(id).equals("Saboteur")) {
+                int count = roomData.scores.containsKey(id) ? roomData.scores.get(id) : 0;
+                roomData.scores.put(id, count + 1);
+            }
+        }
+    }
+
+    /**
+     * If we reach the end of the main timer, update the score for guesser and drawer
+     */
+    private void updateGuesserAndDrawerScore(){
+        // Update score for Drawer and Guesser
+        for (String id : roomData.players.keySet()) {
+            if (!roomData.players.get(id).equals("Saboteur")) {
+                int count = roomData.scores.containsKey(id) ? roomData.scores.get(id) : 0;
+                roomData.scores.put(id, count + 1);
+            }
+        }
     }
 
 }
