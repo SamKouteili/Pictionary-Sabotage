@@ -41,8 +41,7 @@ public class BasicUnitTest {
     @Test
     public void playButtonGoesToRoom() {
         // Click on Play button
-        onView(withId(R.id.startGameButton))
-                .perform(click());
+        onView(withId(R.id.startGameButton)).perform(click());
 
         //Check if view change by checking if we can see button createRoom
         onView(withId(R.id.createRoom)).check(matches(isDisplayed()));
@@ -54,6 +53,15 @@ public class BasicUnitTest {
         onView(withId(R.id.startGame)).check(matches(isDisplayed()));
     }
 
-    
+    @Test
+    public void joinRoomButtoGoesToWaitingRoom() {
+        onView(withId(R.id.startGameButton)).perform(click());
+
+        //Enter some random room that exists on database
+        onView(withId(R.id.enterRoomId)).perform(typeText("9907"));
+        onView(withId(R.id.joinRoom)).perform(click());
+        onView(withId(R.id.joinRoom)).perform(click());
+        onView(withId(R.id.startGame)).check(matches(isDisplayed()));
+    }
 
 }
