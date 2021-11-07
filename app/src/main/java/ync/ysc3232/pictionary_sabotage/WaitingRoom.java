@@ -79,7 +79,6 @@ public class WaitingRoom extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 roomData = snapshot.child(roomId).getValue(RoomData.class);
 
-
                 //If the data update says game has started - move to next page
                 if (roomData.isGameStarted()) {
                     Intent intent = new Intent(WaitingRoom.this, RandomWordGenerator.class);
@@ -98,6 +97,31 @@ public class WaitingRoom extends AppCompatActivity {
                     spinners[i].setOnItemSelectedListener(spinnerListener);
                     i += 1;
                 }
+
+                startGame.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view){
+
+//                        // If all players chose unique roles, then update database to start game
+//                        if (playersChoseRoles(roomData.players)){
+//                            players_chose_roles = true;
+//                        }
+
+                        if (playersChoseRoles(roomData.players)){
+                            if (allRolesUnique(roomData.players)){
+                                startGame.setError(null);
+                                roomData.setGameStarted(true);
+                                rooms_database.child(roomId).setValue(roomData);
+                            } else {
+                                startGame.setError("Players must chose different roles!");
+                            }
+                        } else {
+                            startGame.setError("All players must chose a role!");
+                        }
+
+                    }
+                });
+
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -105,29 +129,29 @@ public class WaitingRoom extends AppCompatActivity {
             }
         });
 
-        startGame.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-
-                // If all players chose unique roles, then update database to start game
-                if (playersChoseRoles(roomData.players)){
-                    players_chose_roles = true;
-                }
-
-                if (players_chose_roles){
-                    if (allRolesUnique(roomData.players)){
-                        startGame.setError(null);
-                        roomData.setGameStarted(true);
-                        rooms_database.child(roomId).setValue(roomData);
-                    } else {
-                        startGame.setError("Players must chose different roles!");
-                    }
-                } else {
-                    startGame.setError("All players must chose a role!");
-                }
-
-            }
-        });
+//        startGame.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View view){
+//
+//                // If all players chose unique roles, then update database to start game
+//                if (playersChoseRoles(roomData.players)){
+//                    players_chose_roles = true;
+//                }
+//
+//                if (playersChoseRoles(roomData.players)){
+//                    if (allRolesUnique(roomData.players)){
+//                        startGame.setError(null);
+//                        roomData.setGameStarted(true);
+//                        rooms_database.child(roomId).setValue(roomData);
+//                    } else {
+//                        startGame.setError("Players must chose different roles!");
+//                    }
+//                } else {
+//                    startGame.setError("All players must chose a role!");
+//                }
+//
+//            }
+//        });
     }
 
     private boolean playersChoseRoles(Map<String, String> player_roles){

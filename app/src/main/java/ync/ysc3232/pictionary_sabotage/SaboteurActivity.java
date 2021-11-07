@@ -170,8 +170,12 @@ public class SaboteurActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                waitTimer.cancel();
-                sabotageTimer.cancel();
+                if (sabotageTimer != null){
+                    sabotageTimer.cancel();
+                }
+                if (waitTimer != null){
+                    waitTimer.cancel();
+                }
 
                 Intent intent = new Intent(SaboteurActivity.this, RandomWordGenerator.class);
                 startActivity(intent);
