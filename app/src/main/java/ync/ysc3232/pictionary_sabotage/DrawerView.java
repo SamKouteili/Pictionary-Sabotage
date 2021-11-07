@@ -65,11 +65,6 @@ public class DrawerView extends View {
         brush.setStrokeWidth(brush_size);
     }
 
-    public void endRound(Context context){
-
-
-    }
-
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawBitmap(canvas_bitmap, 0 , 0, canvas_paint);
