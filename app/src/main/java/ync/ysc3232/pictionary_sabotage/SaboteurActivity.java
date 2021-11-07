@@ -42,6 +42,7 @@ public class SaboteurActivity extends AppCompatActivity {
     private final long waitTime = 5000;
     private final long sabotageTime = 3000;
     private boolean can_sabotage;
+    private boolean has_sabotaged;
     private final String go = "GO!";
 
 
@@ -55,6 +56,7 @@ public class SaboteurActivity extends AppCompatActivity {
         saboteur_view.EraserMode();
         countdownText = findViewById(R.id.countDown_draw);
         can_sabotage = false;
+        has_sabotaged = false;
         saboteur_button = (Button) findViewById(R.id.sabotage_button);
 
         // Set room Id
@@ -90,9 +92,11 @@ public class SaboteurActivity extends AppCompatActivity {
 
         saboteur_button.setOnClickListener(view -> {
 
-            if (can_sabotage){
+            // We only want this to happen once
+            if (can_sabotage && !has_sabotaged){
                 saboteur_view.setCanDraw(true);
                 sabotageTimer();
+                has_sabotaged = true;
             }
 
         });
@@ -118,6 +122,7 @@ public class SaboteurActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 can_sabotage = true;
+                has_sabotaged = false;
                 saboteur_button.setBackgroundResource(R.drawable.green_button);
                 saboteur_button.setText(go);
             }
