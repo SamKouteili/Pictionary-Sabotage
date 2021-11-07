@@ -37,6 +37,8 @@ public class RandomWordGenerator extends AppCompatActivity {
     private RoomData roomData;
     private String currRole;
     private String randomWordString;
+    private boolean timer_started;
+
 
     //Generate a random word from the string array - get words from data base
     DatabaseReference database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
@@ -54,6 +56,7 @@ public class RandomWordGenerator extends AppCompatActivity {
         //Get the room id
         Bundle bundle = getIntent().getExtras();
         roomId = bundle.getString("roomID");
+        timer_started = false;
 
         countdownText = findViewById(R.id.countdown_text);
         randomWord = findViewById(R.id.randomWord);
@@ -67,7 +70,10 @@ public class RandomWordGenerator extends AppCompatActivity {
                 randomWord.setText(randomWordString);
 
                 //Only start time when word is generated
-                startTimer();
+                if (!timer_started){
+                    startTimer();
+                    timer_started = true;
+                }
             }
 
             @Override
