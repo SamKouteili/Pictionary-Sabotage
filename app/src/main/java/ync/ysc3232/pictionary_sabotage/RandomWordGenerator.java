@@ -136,7 +136,11 @@ public class RandomWordGenerator extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         roomData = snapshot.child(roomId).getValue(RoomData.class);
                         currRole = roomData.players.get(curUsr);
-                        Log.d("RandomWordGenerator", "my role is " + currRole);
+                        Intent intent = new Intent(RandomWordGenerator.this, GuesserActivity.class);
+                        intent.putExtra("round word", randomWordString);
+                        intent.putExtra("round num", roomData.getRoundNum());
+                        intent.putExtra("roomID", roomId);
+                        startActivity(intent);
                     }
 
                     @Override
@@ -145,11 +149,6 @@ public class RandomWordGenerator extends AppCompatActivity {
                     }
                 });
 
-                Intent intent = new Intent(RandomWordGenerator.this, GuesserActivity.class);
-                intent.putExtra("round word", randomWordString);
-                intent.putExtra("round num", roomData.getRoundNum());
-                intent.putExtra("roomID", roomId);
-                startActivity(intent);
             }
         }.start();
     }
