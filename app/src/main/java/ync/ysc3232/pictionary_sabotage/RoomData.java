@@ -13,16 +13,18 @@ public class RoomData {
     Map<String, Integer> scores;
     boolean gameStarted;
     int roundNum;
+    List<String> fiveWords;
 
     public RoomData(){}
 
-    public RoomData(String roomId){
+    public RoomData(String roomId, List<String> fiveWords){
         this.roomId = roomId;
         this.numberOfPlayers = 0;
         this.players = new HashMap<>();
         this.scores = new HashMap<>();
         this.gameStarted = false;
         this.roundNum = 0;
+        this.fiveWords = fiveWords;
 //        String[] roles = {"Undecided", "Guesser", "Saboteur", "Drawer"};
     }
 
@@ -74,11 +76,19 @@ public class RoomData {
         this.roundNum = roundNum;
     }
 
+    public List<String> getFiveWords() {
+        return fiveWords;
+    }
+
+    public void setFiveWords(List<String> fiveWords) {
+        this.fiveWords = fiveWords;
+    }
+
+    //Do not delete these
     public void incrementRoundNum(){
         this.roundNum++;
     }
 
-    //Do not delete these
     void addPlayer(String player, String roleId){
         if (!players.containsKey(player)) {
             numberOfPlayers += 1;

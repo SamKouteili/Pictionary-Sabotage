@@ -22,8 +22,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class Room extends AppCompatActivity {
 
@@ -33,8 +37,9 @@ public class Room extends AppCompatActivity {
     private boolean validRoomId;
     private RoomData roomData;
 
-    DatabaseReference room_database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
-            .getReference().child("Rooms");
+
+    DatabaseReference database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
+            .getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,18 +56,38 @@ public class Room extends AppCompatActivity {
             public void onClick(View view) {
                 //Create a random room number
                 String roomId = String.valueOf((int)(Math.random() * 10000));
+                String[] random_words = {"", "", "", "", ""};
+                Set<Integer> words_nums = new HashSet<>();
+                while (words_nums.size() < 5) {
+                    int i = (int)(Math.random() * 10);
+                    words_nums.add(Integer.valueOf(i));
+                }
 
-                //TODO: If a room id is taken, we cannot use it again
-                DatabaseReference newRoom = room_database.child(roomId);
-                roomData = new RoomData(roomId);
-                roomData.addPlayer(getCurrentUser(), "Undecided");
-                newRoom.setValue(roomData);
+                database.child("random_words").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        DatabaseReference newRoom = database.child("Rooms").child(roomId);
+                        int j = 0;
+                        for (int i : words_nums) {
+                            random_words[j] = snapshot.child(String.valueOf(i)).getValue().toString();
+                            j += 1;
+                        }
+                        roomData = new RoomData(roomId, Arrays.asList(random_words));
+                        roomData.addPlayer(getCurrentUser(), "Undecided");
+                        newRoom.setValue(roomData);
 
-                //Passing room Id using intent
-                //https://stackoverflow.com/questions/2091465/how-do-i-pass-data-between-activities-in-android-application#:~:text=The%20easiest%20way%20to%20do,sessionId)%3B%20startActivity(intent)%3B
-                Intent intent = new Intent(Room.this, WaitingRoom.class);
-                intent.putExtra("roomId", roomId);
-                startActivity(intent);
+                        //Passing room Id using intent
+                        //https://stackoverflow.com/questions/2091465/how-do-i-pass-data-between-activities-in-android-application#:~:text=The%20easiest%20way%20to%20do,sessionId)%3B%20startActivity(intent)%3B
+                        Intent intent = new Intent(Room.this, WaitingRoom.class);
+                        intent.putExtra("roomId", roomId);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
         });
 
@@ -78,10 +103,22 @@ public class Room extends AppCompatActivity {
                 }
 
                 //Fetch current room data
-                room_database.addValueEventListener(new ValueEventListener() {
+                database.child("Rooms").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         roomData = snapshot.child(roomId).getValue(RoomData.class);
+
+                        if (roomData == null) {
+                            Toast.makeText(Room.this, "Invalid Room Number", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        roomData.addPlayer(getCurrentUser(), "Undecided");
+                        database.child("Rooms").child(roomId).setValue(roomData);
+
+                        Intent intent = new Intent(Room.this, WaitingRoom.class);
+                        intent.putExtra("roomId", roomId);
+                        startActivity(intent);
                     }
 
                     @Override
@@ -90,18 +127,6 @@ public class Room extends AppCompatActivity {
                         Toast.makeText(Room.this, "Invalid Room Number", Toast.LENGTH_SHORT).show();
                     }
                 });
-
-                if (roomData == null) {
-                    Toast.makeText(Room.this, "Invalid Room Number", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                roomData.addPlayer(getCurrentUser(), "Undecided");
-                room_database.child(roomId).setValue(roomData);
-
-                Intent intent = new Intent(Room.this, WaitingRoom.class);
-                intent.putExtra("roomId", roomId);
-                startActivity(intent);
             }
 
         });

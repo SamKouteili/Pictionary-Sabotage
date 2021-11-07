@@ -33,14 +33,10 @@ public class RandomWordGenerator extends AppCompatActivity {
     private CountDownTimer countDownTimer;
     private long timeLeftInMilliseconds = 5000;
     private Button finish;
-    private int num_of_words;
     private String roomId;
     private RoomData roomData;
     private String currRole;
     private String randomWordString;
-
-
-    private String[] words = {"tree", "bench", "squirrel", "hat", "nose"};
 
     //Generate a random word from the string array - get words from data base
     DatabaseReference database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
@@ -62,45 +58,49 @@ public class RandomWordGenerator extends AppCompatActivity {
         countdownText = findViewById(R.id.countdown_text);
         randomWord = findViewById(R.id.randomWord);
 
-        database.child("random_words").child("num_words").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()) {
-                    Log.e("firebase", "Error getting number of words", task.getException());
-                }
-                else {
-                    // TODO: fix; currently returns 0
-                    num_of_words = Integer.parseInt(String.valueOf(task.getResult().getValue()));
-                }
-            }
-        });
-
-        //Generate random number
-        int x = (int)(Math.random() * 10);
-
-        // Read from the database to generate random word
-        database.child("random_words").child(String.valueOf(x)).addValueEventListener(new ValueEventListener() {
+        database.child("Rooms").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                randomWord.setText(snapshot.getValue().toString());
-                randomWordString = snapshot.getValue().toString();
+                roomData = snapshot.child(roomId).getValue(RoomData.class);
+                int round = roomData.getRoundNum();
+                randomWordString = roomData.fiveWords.get(round);
+                randomWord.setText(randomWordString);
 
                 //Only start time when word is generated
                 startTimer();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.e("firebase", "Data not retrieved");
             }
         });
 
-
+//        //Generate random number
+//        int x = (int)(Math.random() * 10);
+//
+//        // Read from the database to generate random word
+//        database.child("random_words").child(String.valueOf(x)).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                randomWord.setText(snapshot.getValue().toString());
+//                randomWordString = snapshot.getValue().toString();
+//
+//                //Only start time when word is generated
+//                startTimer();
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                Log.e("firebase", "Data not retrieved");
+//            }
+//        });
         finish = findViewById(R.id.finish);
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 stopTimer();
                 Intent intent = new Intent(RandomWordGenerator.this, PodiumActivity.class);
+                intent.putExtra("roomID", roomId);
                 startActivity(intent);
             }
         });
