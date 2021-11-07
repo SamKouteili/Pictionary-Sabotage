@@ -66,13 +66,15 @@ public class RandomWordGenerator extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 roomData = snapshot.child(roomId).getValue(RoomData.class);
                 int round = roomData.getRoundNum();
-                randomWordString = roomData.fiveWords.get(round);
-                randomWord.setText(randomWordString);
+                if (round < 5) {
+                    randomWordString = roomData.fiveWords.get(round);
+                    randomWord.setText(randomWordString);
 
-                //Only start time when word is generated
-                if (!timer_started){
-                    startTimer();
-                    timer_started = true;
+                    //Only start time when word is generated
+                    if (!timer_started){
+                        startTimer();
+                        timer_started = true;
+                    }
                 }
             }
 
