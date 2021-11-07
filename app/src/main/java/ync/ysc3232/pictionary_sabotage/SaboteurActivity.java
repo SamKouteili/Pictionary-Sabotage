@@ -82,6 +82,7 @@ public class SaboteurActivity extends AppCompatActivity {
                         intent.putExtra("roomID", roomID);
                         startActivity(intent);
                     } else {
+                        countDownTimer.cancel();
                         Intent intent = new Intent(SaboteurActivity.this, PodiumActivity.class);;
                         intent.putExtra("roomID", roomID);
                         startActivity(intent);
