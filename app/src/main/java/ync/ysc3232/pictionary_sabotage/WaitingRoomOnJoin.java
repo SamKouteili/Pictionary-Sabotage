@@ -55,7 +55,7 @@ public class WaitingRoomOnJoin extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         roomId = bundle.getString("roomId");
         roomIdText.setText(roomId);
-        Log.d("WaitingRoomonJoin", "Enter Waiting Room with roomId " + roomId);
+        Log.d("TAGGG", "Enter Waiting Room with roomId " + roomId);
 
         //Disbale StartGame Button
         startGame.setEnabled(false);
@@ -68,7 +68,7 @@ public class WaitingRoomOnJoin extends AppCompatActivity {
 
                 //If the data update says game has started - move to next page
                 if (roomData.isGameStarted()) {
-                    Log.d("WaitingROom", "Game Started for " + roomId);
+                    Log.d("TAGG", "Game Started for " + roomId);
                     Intent intent = new Intent(WaitingRoomOnJoin.this, RandomWordGenerator.class);
                     intent.putExtra("roomID", roomId);
                     startActivity(intent);
@@ -76,7 +76,7 @@ public class WaitingRoomOnJoin extends AppCompatActivity {
                     int i = 0;
                     roomData = snapshot.getValue(RoomData.class);
                     for (DataSnapshot playerSnapShot : snapshot.child("players").getChildren()) {
-                        Log.d("waitingRoom", "Players include " + playerSnapShot.getKey());
+                        Log.d("TAGG", "Players include " + playerSnapShot.getKey());
                         playersText[i].setText(playerSnapShot.getKey());
                         playersRoleText[i].setText(playerSnapShot.getValue().toString());
                         playersRoleText[i].setVisibility(View.VISIBLE);

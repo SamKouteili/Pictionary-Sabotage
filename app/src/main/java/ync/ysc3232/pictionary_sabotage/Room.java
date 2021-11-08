@@ -66,7 +66,7 @@ public class Room extends AppCompatActivity {
                     words_nums.add(Integer.valueOf(i));
                 }
 
-                Log.d("Room", "Clicked on CreateRoom with a new roomId " + roomId.toString());
+                Log.d("TAGGG", "Clicked on CreateRoom with a new roomId " + roomId.toString());
 
                 //Instead of using OnDataChange - we just get once and don't listen to change
                 database.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -93,7 +93,7 @@ public class Room extends AppCompatActivity {
                             newRoom.setValue(roomData);
 
                             //Passing room Id using intent
-                            Log.d("Room", "Intent created to WaitingRoom with roomId " + roomId.toString());
+                            Log.d("TAGGG", "Intent created to WaitingRoom with roomId " + roomId.toString());
                             Intent intent = new Intent(Room.this, WaitingRoom.class);
                             intent.putExtra("roomId", roomId);
                             startActivity(intent);

@@ -67,7 +67,7 @@ public class WaitingRoom extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         roomId = bundle.getString("roomId");
         roomIdText.setText(roomId);
-        Log.d("WaitingROom", "Enter Waiting Room with roomId " + roomId);
+        Log.d("TAGGG", "Enter Waiting Room with roomId " + roomId);
 
 
         startGame.setOnClickListener(new View.OnClickListener(){
@@ -82,11 +82,11 @@ public class WaitingRoom extends AppCompatActivity {
                         roomData.setGameStarted(true);
                         rooms_database.child(roomId).setValue(roomData);
                     } else {
-                        Log.d("WaitingRoom", "Players must chose different roles!");
+                        Log.d("TAGGG", "Players must chose different roles!");
                         startGame.setError("Players must chose different roles!");
                     }
                 } else {
-                    Log.d("WaitingRoom", "All players must chose a role!");
+                    Log.d("TAGGG", "All players must chose a role!");
                     startGame.setError("All players must chose a role!");
                 }
 
@@ -102,12 +102,12 @@ public class WaitingRoom extends AppCompatActivity {
                 //Testing
                 Bundle bundle = getIntent().getExtras();
                 roomId = bundle.getString("roomId");
-                Log.d("WaitingRoomBundle", "WaitingRoom has bundle with roomId " + roomId);
+                Log.d("TAGGG", "WaitingRoom has bundle with roomId " + roomId);
 
 
                 //If the data update says game has started - move to next page
                 if (roomData.isGameStarted()) {
-                    Log.d("WaitingROom", "Game Started for " + roomId);
+                    Log.d("TAGGG", "Game Started for " + roomId);
                     Intent intent = new Intent(WaitingRoom.this, RandomWordGenerator.class);
                     intent.putExtra("roomID", roomId);
                     startActivity(intent);
@@ -115,7 +115,7 @@ public class WaitingRoom extends AppCompatActivity {
                     int i = 0;
                     roomData = snapshot.getValue(RoomData.class);
                     for (DataSnapshot playerSnapShot : snapshot.child("players").getChildren()) {
-                        Log.d("waitingRoom", "Players include " + playerSnapShot.getKey());
+                        Log.d("TAGGG", "Players include " + playerSnapShot.getKey());
                         playersText[i].setText(playerSnapShot.getKey());
                         spinners[i].setEnabled(true);
                         ChoosingRoleSpinner spinnerListener = new ChoosingRoleSpinner(roomData, playerSnapShot.getKey());

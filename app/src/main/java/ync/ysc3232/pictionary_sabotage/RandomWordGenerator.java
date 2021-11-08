@@ -57,7 +57,7 @@ public class RandomWordGenerator extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         roomId = bundle.getString("roomID");
         timer_started = false;
-        Log.d("Classes", getCurrentUser() + " is in RamdomWordGenerator with roomId" + roomId);
+        Log.d("TAGGG", getCurrentUser() + " is in RamdomWordGenerator with roomId" + roomId);
 
         countdownText = findViewById(R.id.countdown_text);
         randomWord = findViewById(R.id.randomWord);
@@ -159,7 +159,7 @@ public class RandomWordGenerator extends AppCompatActivity {
                         } else {
                             roomData = task.getResult().child(roomId).getValue(RoomData.class);
                             if (curUsr == null){
-                                Log.d("usrID", "usrID empty???");
+                                Log.d("TAGGG", "usrID empty???");
                             }
                             currRole = roomData.players.get(curUsr);
 
