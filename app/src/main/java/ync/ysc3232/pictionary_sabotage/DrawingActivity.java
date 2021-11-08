@@ -38,7 +38,7 @@ public class DrawingActivity extends AppCompatActivity {
     private Toolbar bottom_toolbar;
     private DrawerView drawer_view;
 
-    private long timeLeftToDraw = 20000; // 20 seconds
+    private long timeLeftToDraw = 30000; // 30 seconds
     private CountDownTimer countDownTimer;
     private TextView countdownText;
 

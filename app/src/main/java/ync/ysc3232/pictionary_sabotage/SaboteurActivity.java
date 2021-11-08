@@ -36,14 +36,14 @@ public class SaboteurActivity extends AppCompatActivity {
     private DrawerView saboteur_view;
 
 
-    private long timeLeftToDraw = 20000; // 20 seconds
+    private long timeLeftToDraw = 30000; // 30 seconds
     private CountDownTimer countDownTimer;
     private TextView countdownText;
 
     private CountDownTimer sabotageTimer;
     private CountDownTimer waitTimer;
     private final long waitTime = 5000;
-    private final long sabotageTime = 3000;
+    private final long sabotageTime = 5000;
     private boolean can_sabotage;
     private boolean has_sabotaged;
     private final String go = "GO!";
