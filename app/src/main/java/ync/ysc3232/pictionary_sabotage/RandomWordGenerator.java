@@ -109,7 +109,6 @@ public class RandomWordGenerator extends AppCompatActivity {
                 String updatedCountDownTest;
                 updatedCountDownTest = "" + seconds;
                 countdownText.setText(updatedCountDownTest);
-
             }
 
             @Override

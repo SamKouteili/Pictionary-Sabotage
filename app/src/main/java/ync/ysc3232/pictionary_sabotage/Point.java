@@ -1,5 +1,10 @@
 package ync.ysc3232.pictionary_sabotage;
 
+/**
+ * The Point class holds the information for which position on the screen should the Path go through.
+ * This includes the x and y coordinates.
+ */
+
 public class Point {
     private float x;
     private float y;
