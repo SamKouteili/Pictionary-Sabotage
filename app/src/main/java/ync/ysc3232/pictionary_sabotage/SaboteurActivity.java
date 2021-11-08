@@ -79,7 +79,7 @@ public class SaboteurActivity extends AppCompatActivity {
                     if (countDownTimer != null){
                         countDownTimer.cancel();
                     }
-                    if (cur_round < 4){
+                    if (cur_round < 1){
                         Intent intent = new Intent(SaboteurActivity.this, RandomWordGenerator.class);
                         intent.putExtra("roomID", roomID);
                         startActivity(intent);
