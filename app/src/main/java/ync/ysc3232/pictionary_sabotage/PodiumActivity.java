@@ -79,7 +79,7 @@ public class PodiumActivity extends AppCompatActivity {
         TextView ptsl1 = findViewById(R.id.ptsl1);
         ImageView skull1 = findViewById(R.id.skull1);
         TextView looser2 = findViewById(R.id.looser2);
-        TextView ptsl2 = findViewById(R.id.ptsl1);
+        TextView ptsl2 = findViewById(R.id.ptsl2);
         ImageView skull2 = findViewById(R.id.skull2);
 
         rooms_database.addValueEventListener(new ValueEventListener() {
@@ -101,8 +101,8 @@ public class PodiumActivity extends AppCompatActivity {
 
                 String name1 = allPlayers.get(0).getPlayerName();
                 String points1 = allPlayers.get(0).getScore() + " pts.";
-//                String name2 = allPlayers.get(1).getPlayerName();
-//                String points2 = allPlayers.get(1).getScore() + " pts.";
+                String name2 = allPlayers.get(1).getPlayerName();
+                String points2 = allPlayers.get(1).getScore() + " pts.";
 //                String name3 = allPlayers.get(2).getPlayerName();
 //                String points3 = allPlayers.get(2).getScore() + " pts.";
 
@@ -118,16 +118,16 @@ public class PodiumActivity extends AppCompatActivity {
 //                    looser2.setText(name3);
 //                    ptsl2.setText(points3);
                 } else {
-                    looser1.setText(name1);
-                    ptsl1.setText(points1);
+//                    looser1.setText(name1);
+//                    ptsl1.setText(points1);
                     looser2.setVisibility(View.INVISIBLE);
                     ptsl2.setVisibility(View.INVISIBLE);
                     skull2.setVisibility(View.INVISIBLE);
 
-//                    winner1.setText(name2);
-//                    ptsw1.setText(points2);
-//                    winner2.setText(name3);
-//                    ptsw2.setText(points3);
+                    winner1.setText(name1);
+                    ptsw1.setText(points1);
+                    winner2.setText(name2);
+                    ptsw2.setText(points2);
                 }
             }
 
