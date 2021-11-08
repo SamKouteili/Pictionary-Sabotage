@@ -63,7 +63,7 @@ public class GuesserActivity extends AppCompatActivity {
                 roomData = snapshot.child(roomID).getValue(RoomData.class);
 
                 if (roundEnded()){
-                    if (cur_round < 4){
+                    if (cur_round < 1){
                         Intent intent = new Intent(GuesserActivity.this, RandomWordGenerator.class);
                         intent.putExtra("roomID", roomID);
                         startActivity(intent);

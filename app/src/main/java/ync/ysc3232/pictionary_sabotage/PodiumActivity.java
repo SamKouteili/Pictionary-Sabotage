@@ -110,6 +110,7 @@ public class PodiumActivity extends AppCompatActivity {
                     winner1.setText(name1);
                     ptsw1.setText(points1);
                     winner2.setVisibility(View.INVISIBLE);
+                    ptsw2.setVisibility(View.INVISIBLE);
                     crown2.setVisibility(View.INVISIBLE);
 
 //                    looser1.setText(name2);
@@ -120,6 +121,7 @@ public class PodiumActivity extends AppCompatActivity {
                     looser1.setText(name1);
                     ptsl1.setText(points1);
                     looser2.setVisibility(View.INVISIBLE);
+                    ptsl2.setVisibility(View.INVISIBLE);
                     skull2.setVisibility(View.INVISIBLE);
 
 //                    winner1.setText(name2);
