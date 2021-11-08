@@ -59,6 +59,7 @@ public class PodiumActivity extends AppCompatActivity {
 
         Button returnButton = findViewById(R.id.returnToMenuButton);
         returnButton.setOnClickListener(view -> {
+            Log.d("TAGGG", "Return to Main Menu from Podium pressed");
             Intent intent = new Intent(PodiumActivity.this, MainActivity.class);
             startActivity(intent);
         });

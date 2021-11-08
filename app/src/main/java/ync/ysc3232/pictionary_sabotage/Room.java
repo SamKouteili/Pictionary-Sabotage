@@ -62,6 +62,8 @@ public class Room extends AppCompatActivity {
         joinRoom = findViewById(R.id.joinRoom);
         eneteredRoomId = findViewById(R.id.enterRoomId);
 
+        Log.d("TAGGG", "New Room.java Created");
+
         //At createRoom, immediately create a new room with a new code and go to Waiting Room
         createRoom.setOnClickListener(new View.OnClickListener() {
             @Override

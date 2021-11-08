@@ -120,6 +120,7 @@ public class WaitingRoom extends AppCompatActivity {
                     Intent intent = new Intent(WaitingRoom.this, RandomWordGenerator.class);
                     intent.putExtra("roomID", roomId);
                     startActivity(intent);
+//                    finish();
                 } else {
                     int i = 0;
                     roomData = snapshot.getValue(RoomData.class);
