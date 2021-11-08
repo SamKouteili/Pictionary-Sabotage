@@ -124,10 +124,10 @@ public class PodiumActivity extends AppCompatActivity {
                     ptsl2.setVisibility(View.INVISIBLE);
                     skull2.setVisibility(View.INVISIBLE);
 
-                    winner1.setText(name1);
-                    ptsw1.setText(points1);
-                    winner2.setText(name2);
-                    ptsw2.setText(points2);
+                    winner1.setText(name2);
+                    ptsw1.setText(points2);
+                    winner2.setText(name3);
+                    ptsw2.setText(points3);
                 }
             }
 
