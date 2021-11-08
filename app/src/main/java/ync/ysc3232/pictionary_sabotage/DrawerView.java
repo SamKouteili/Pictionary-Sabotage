@@ -76,6 +76,7 @@ public class DrawerView extends View {
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Log.d("CHILD LISTEN", "changed! ");
                 if(snapshot.exists()){
+                    if(previousChildName == null) previousChildName = "";
                     switch(previousChildName){
                         case "color": //changed points
                             Iterator<DataSnapshot> x_list = snapshot.child("x_points").getChildren().iterator();
@@ -89,12 +90,14 @@ public class DrawerView extends View {
                                 segment.addPoints(x, y);
                             }
                             drawSegment(segment, brush);
+//                            Log.d("POINTS", "points length: "+segment.getPoints().size());
                             break;
                         case "points": //changed size
                             Log.d("SIZE", "size: "+snapshot.getValue().toString());
-
-                        default:
+                            break;
+                        default: //changed color
                             Log.d("COLOR", "color: "+snapshot.getValue().toString());
+                            break;
                     }
                 }
             }
