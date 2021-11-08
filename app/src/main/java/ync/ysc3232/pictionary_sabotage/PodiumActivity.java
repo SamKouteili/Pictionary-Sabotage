@@ -55,6 +55,9 @@ public class PodiumActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         roomId = bundle.getString("roomID");
 
+        //End game
+        rooms_database.child(roomId).child("gameStarted").setValue(false);
+
         Button returnToMenuButton = findViewById(R.id.returnToMenuButton);
         returnToMenuButton.setOnClickListener(view -> {
             Intent intent = new Intent(PodiumActivity.this, MainActivity.class);

@@ -89,17 +89,18 @@ public class RandomWordGenerator extends AppCompatActivity {
             }
         });
 
-        finish = findViewById(R.id.finish);
-        finish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                stopTimer();
-                database.child("Rooms").child(roomId).child("gameStarted").setValue(false);
-                Intent intent = new Intent(RandomWordGenerator.this, PodiumActivity.class);
-                intent.putExtra("roomID", roomId);
-                startActivity(intent);
-            }
-        });
+//        finish = findViewById(R.id.finish);
+//        finish.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                stopTimer();
+//                database.child("Rooms").child(roomId).child("gameStarted").setValue(false);
+//                finish();
+//                Intent intent = new Intent(RandomWordGenerator.this, PodiumActivity.class);
+//                intent.putExtra("roomID", roomId);
+//                startActivity(intent);
+//            }
+//        });
 
     }
 
