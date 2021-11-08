@@ -79,8 +79,8 @@
 
     <TextView
         android:id="@+id/player3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="118dp"
+        android:layout_height="30dp"
         android:layout_marginTop="52dp"
         android:fontFamily="casual"
         android:text="Waiting..."
@@ -88,12 +88,12 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/player1"
-        tools:layout_editor_absoluteX="79dp" />
+        tools:layout_editor_absoluteX="46dp" />
 
     <TextView
         android:id="@+id/player1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="118dp"
+        android:layout_height="30dp"
         android:layout_marginTop="16dp"
         android:fontFamily="casual"
         android:text="Waiting..."
@@ -101,12 +101,12 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/players"
-        tools:layout_editor_absoluteX="79dp" />
+        tools:layout_editor_absoluteX="42dp" />
 
     <TextView
         android:id="@+id/player2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="118dp"
+        android:layout_height="30dp"
         android:layout_marginTop="8dp"
         android:fontFamily="casual"
         android:text="Waiting..."
@@ -114,7 +114,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/player1"
-        tools:layout_editor_absoluteX="79dp" />
+        tools:layout_editor_absoluteX="44dp" />
 
     <TextView
         android:id="@+id/roomId"
