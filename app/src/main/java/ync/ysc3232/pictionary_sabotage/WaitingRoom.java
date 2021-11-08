@@ -99,6 +99,12 @@ public class WaitingRoom extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 roomData = snapshot.getValue(RoomData.class);
 
+                //Testing
+                Bundle bundle = getIntent().getExtras();
+                roomId = bundle.getString("roomId");
+                Log.d("WaitingRoomBundle", "WaitingRoom has bundle with roomId " + roomId);
+
+
                 //If the data update says game has started - move to next page
                 if (roomData.isGameStarted()) {
                     Log.d("WaitingROom", "Game Started for " + roomId);
