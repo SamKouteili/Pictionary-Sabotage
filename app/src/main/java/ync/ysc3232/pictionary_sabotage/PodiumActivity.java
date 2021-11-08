@@ -57,6 +57,12 @@ public class PodiumActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         roomId = bundle.getString("roomID");
 
+        Button returnButton = findViewById(R.id.returnToMenuButton);
+        returnButton.setOnClickListener(view -> {
+            Intent intent = new Intent(PodiumActivity.this, MainActivity.class);
+            startActivity(intent);
+        });
+
         TextView title = findViewById(R.id.title);
         TextView winners = findViewById(R.id.winners);
         TextView loosers = findViewById(R.id.loosers);
