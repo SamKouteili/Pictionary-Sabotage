@@ -76,6 +76,7 @@ public class WaitingRoom extends AppCompatActivity {
                 // If all players chose unique roles, then update database to start game
 
                 if (playersChoseRoles(roomData.players)){
+                    Log.d("StartGame", "Clicked and all players chose roles");
                     if (allRolesUnique(roomData.players)){
                         startGame.setError(null);
                         roomData.setGameStarted(true);
@@ -84,6 +85,7 @@ public class WaitingRoom extends AppCompatActivity {
                         startGame.setError("Players must chose different roles!");
                     }
                 } else {
+                    Log.d("StartGame", "Clicked and all players did not chose roles");
                     startGame.setError("All players must chose a role!");
                 }
 
