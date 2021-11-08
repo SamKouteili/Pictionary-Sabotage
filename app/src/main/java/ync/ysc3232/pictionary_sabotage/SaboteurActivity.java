@@ -191,9 +191,9 @@ public class SaboteurActivity extends AppCompatActivity {
                 }
 
                 Log.d("SabotageTimer", "startTimer Finish");
-                Intent intent = new Intent(SaboteurActivity.this, RandomWordGenerator.class);
-                intent.putExtra("roomID", roomID);
-                startActivity(intent);
+//                Intent intent = new Intent(SaboteurActivity.this, RandomWordGenerator.class);
+//                intent.putExtra("roomID", roomID);
+//                startActivity(intent);
 
             }
         }.start();

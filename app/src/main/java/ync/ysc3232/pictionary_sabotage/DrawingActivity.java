@@ -145,9 +145,9 @@ public class DrawingActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 // should technically wait for GuesserActivity
-                Intent intent = new Intent(DrawingActivity.this, RandomWordGenerator.class);
-                intent.putExtra("roomID", roomID);
-                startActivity(intent);
+//                Intent intent = new Intent(DrawingActivity.this, RandomWordGenerator.class);
+//                intent.putExtra("roomID", roomID);
+//                startActivity(intent);
             }
         }.start();
     }
