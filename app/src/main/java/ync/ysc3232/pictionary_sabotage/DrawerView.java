@@ -47,13 +47,15 @@ public class DrawerView extends View {
     private int paint_color = Color.BLACK;
     private float brush_size;
     private boolean can_draw;
-    private Set<String> outstanding_segments;
     private Segment curr_segment;
-    private boolean xy_updated;
 
     private void init(){
+        this.setBackgroundColor(Color.WHITE);
+
         brush_size = 8f;
         draw_path = new Path();
+        canvas_paint = new Paint(Paint.DITHER_FLAG);
+
         brush = new Paint();
         brush.setColor(paint_color);
         brush.setAntiAlias(true);
@@ -61,36 +63,39 @@ public class DrawerView extends View {
         brush.setStyle(Paint.Style.STROKE);
         brush.setStrokeJoin(Paint.Join.ROUND);
         brush.setStrokeCap(Paint.Cap.ROUND);
+
         can_draw = true;
-        this.setBackgroundColor(Color.WHITE);
-        canvas_paint = new Paint(Paint.DITHER_FLAG);
-        outstanding_segments = new HashSet<String>();
-        xy_updated = true;
 
         canvas_db.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
                 Log.d("CHILD LISTEN", "added!");
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                Log.d("CHILD LISTEN", "changed!");
-                if(snapshot.exists() && xy_updated){
-                    Log.d("CHILD LISTEN", "Actual change!");
-                    Iterator<DataSnapshot> x_list = snapshot.child("x_points").getChildren().iterator();
-                    Iterator<DataSnapshot> y_list = snapshot.child("y_points").getChildren().iterator();
+                Log.d("CHILD LISTEN", "changed! ");
+                if(snapshot.exists()){
+                    switch(previousChildName){
+                        case "color": //changed points
+                            Iterator<DataSnapshot> x_list = snapshot.child("x_points").getChildren().iterator();
+                            Iterator<DataSnapshot> y_list = snapshot.child("y_points").getChildren().iterator();
 
-                    Segment segment = new Segment(paint_color, brush_size);
+                            Segment segment = new Segment(paint_color, brush_size);
 
-                    while(x_list.hasNext() && y_list.hasNext()){
-                        float x = x_list.next().getValue(Double.class).floatValue();
-                        float y = y_list.next().getValue(Double.class).floatValue();
-                        segment.addPoints(x, y);
+                            while(x_list.hasNext() && y_list.hasNext()){
+                                float x = x_list.next().getValue(Double.class).floatValue();
+                                float y = y_list.next().getValue(Double.class).floatValue();
+                                segment.addPoints(x, y);
+                            }
+                            drawSegment(segment, brush);
+                            break;
+                        case "points": //changed size
+                            Log.d("SIZE", "size: "+snapshot.getValue().toString());
+
+                        default:
+                            Log.d("COLOR", "color: "+snapshot.getValue().toString());
                     }
-                    drawSegment(segment, brush);
-                    xy_updated = false;
                 }
             }
 
@@ -126,11 +131,10 @@ public class DrawerView extends View {
      * Drawing and Erasing Mode functions for DrawingActivity
      */
     public void EraserMode(){
-//        paint_color = Color.GREEN;
-//        brush.setColor(paint_color);
-//        brush_size = 25f;
-//        brush.setStrokeWidth(brush_size);
-        pullSegment();
+        paint_color = Color.GREEN;
+        brush.setColor(paint_color);
+        brush_size = 25f;
+        brush.setStrokeWidth(brush_size);
     }
     public void DrawingMode(){
         paint_color = Color.BLACK;
@@ -152,6 +156,9 @@ public class DrawerView extends View {
      */
     public static Path getPathFromPoints(List<Point> points){
         Path path = new Path();
+
+        if(points.isEmpty()) return path;
+
         Point start = points.get(0);
         path.moveTo(start.getX(), start.getY());
         Point curr = null;
@@ -190,30 +197,6 @@ public class DrawerView extends View {
             x_points_ref.child(x_key).setValue(p.getX());
             y_points_ref.child(y_key).setValue(p.getY());
         }
-    }
-
-    private void pullSegment(){
-        canvas_db.child("points").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    Iterator<DataSnapshot> x_list = snapshot.child("x_points").getChildren().iterator();
-                    Iterator<DataSnapshot> y_list = snapshot.child("y_points").getChildren().iterator();
-
-                    Segment segment = new Segment(paint_color, brush_size);
-
-                    while(x_list.hasNext() && y_list.hasNext()){
-                        float x = x_list.next().getValue(Double.class).floatValue();
-                        float y = y_list.next().getValue(Double.class).floatValue();
-                        segment.addPoints(x, y);
-                    }
-                    drawSegment(segment, brush);
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
     }
 
     public void onTouchStart(float x, float y){
