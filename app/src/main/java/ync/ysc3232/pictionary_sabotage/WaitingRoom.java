@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -39,14 +41,22 @@ public class WaitingRoom extends AppCompatActivity {
 
     RoomData roomData;
     String roomId;
-    //Access rooms database
-    DatabaseReference rooms_database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
-            .getReference().child("Rooms");
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Access rooms database
+        DatabaseReference rooms_database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
+                .getReference().child("Rooms");
+
+        //Set room Id
+        Bundle bundle = getIntent().getExtras();
+        roomId = bundle.getString("roomId");
+        Log.d("TAGGG", "Enter Waiting Room with roomId " + roomId);
+
+
         setContentView(R.layout.activity_waiting_room);
         TextView roomIdText = findViewById(R.id.roomId);
         Button startGame = findViewById(R.id.startGame);
@@ -71,13 +81,7 @@ public class WaitingRoom extends AppCompatActivity {
             spinner.setAdapter(adapter);
             spinner.setEnabled(false);
         }
-
-        //Set room Id
-        Bundle bundle = getIntent().getExtras();
-        roomId = bundle.getString("roomId");
         roomIdText.setText(roomId);
-        Log.d("TAGGG", "Enter Waiting Room with roomId " + roomId);
-
 
         startGame.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -107,30 +111,28 @@ public class WaitingRoom extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 roomData = snapshot.getValue(RoomData.class);
-
-                //Testing
-                Bundle bundle = getIntent().getExtras();
-                roomId = bundle.getString("roomId");
-                Log.d("TAGGG", "WaitingRoom has bundle with roomId " + roomId);
-
+                Log.d("TAGGG", "WaitingRoom onDataChange roundNum" + roomData.getRoundNum());
 
                 //If the data update says game has started - move to next page
-                if (roomData.isGameStarted()) {
+                if (roomData.isGameStarted() && roomData.getRoundNum() == 0) {
                     Log.d("TAGGG", "Game Started for " + roomId);
                     Intent intent = new Intent(WaitingRoom.this, RandomWordGenerator.class);
                     intent.putExtra("roomID", roomId);
                     startActivity(intent);
-//                    finish();
+                    return;
                 } else {
-                    int i = 0;
-                    roomData = snapshot.getValue(RoomData.class);
-                    for (DataSnapshot playerSnapShot : snapshot.child("players").getChildren()) {
-                        Log.d("TAGGG", "Players include " + playerSnapShot.getKey());
-                        playersText[i].setText(playerSnapShot.getKey());
-                        spinners[i].setEnabled(true);
-                        ChoosingRoleSpinner spinnerListener = new ChoosingRoleSpinner(roomData, playerSnapShot.getKey());
-                        spinners[i].setOnItemSelectedListener(spinnerListener);
-                        i += 1;
+                    if (roomData.getRoundNum() == 0) {
+                        Log.d("TAGGG", "Game NOT Started for " + roomId);
+                        int i = 0;
+                        for (DataSnapshot playerSnapShot : snapshot.child("players").getChildren()) {
+                            Log.d("TAGGG", "Players include " + playerSnapShot.getKey());
+                            playersText[i].setText(playerSnapShot.getKey());
+                            spinners[i].setEnabled(true);
+                            ChoosingRoleSpinner spinnerListener = new ChoosingRoleSpinner(roomData, playerSnapShot.getKey());
+                            spinners[i].setOnItemSelectedListener(spinnerListener);
+                            i += 1;
+                            return;
+                    }
                     }
                 }
             }
