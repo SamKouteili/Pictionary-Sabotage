@@ -97,7 +97,18 @@ public class PodiumActivity extends AppCompatActivity {
                 if (allPlayers.isEmpty()) {
                     Log.e("Fetching Podium Data", "Podium Data empty");
                 }
-                allPlayers.sort(Comparator.comparing(PlayerDbModel::getScore));
+
+                int i = 0;
+                for (PlayerDbModel p : allPlayers){
+                    if (p.getScore() < allPlayers.get(0).getScore()){
+                        PlayerDbModel tmp = allPlayers.get(0);
+                        allPlayers.set(0, p);
+                        allPlayers.set(i, tmp);
+                    }
+                    i++;
+                }
+
+                // allPlayers.sort(Comparator.comparing(PlayerDbModel::getScore));
 
                 String name1 = allPlayers.get(0).getPlayerName();
                 String points1 = allPlayers.get(0).getScore() + " pts.";
