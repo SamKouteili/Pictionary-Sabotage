@@ -38,7 +38,7 @@ public class DrawingActivity extends AppCompatActivity {
     private Toolbar bottom_toolbar;
     private DrawerView drawer_view;
 
-    private long timeLeftToDraw = 20000; //10 seconds
+    private long timeLeftToDraw = 20000; // 20 seconds
     private CountDownTimer countDownTimer;
     private TextView countdownText;
 
@@ -79,7 +79,7 @@ public class DrawingActivity extends AppCompatActivity {
                     if (countDownTimer != null){
                         countDownTimer.cancel();
                     }
-                    if (cur_round < 1){
+                    if (cur_round < 4){
                         Intent intent = new Intent(DrawingActivity.this, RandomWordGenerator.class);
                         intent.putExtra("roomID", roomID);
                         startActivity(intent);

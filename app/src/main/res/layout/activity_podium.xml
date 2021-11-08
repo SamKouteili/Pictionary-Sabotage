@@ -56,7 +56,7 @@
         android:layout_width="301dp"
         android:layout_height="59dp"
         android:layout_marginStart="36dp"
-        android:layout_marginTop="196dp"
+        android:layout_marginTop="192dp"
         android:layout_marginEnd="36dp"
         android:ems="10"
         android:fontFamily="casual"
@@ -87,8 +87,8 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_marginStart="52dp"
-        android:layout_marginBottom="420dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="36dp"
+        app:layout_constraintBottom_toTopOf="@+id/loosers"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/crown" />
 
@@ -116,12 +116,12 @@
         android:text="Name"
         android:textColor="#6a0dad"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/crown2"
+        app:layout_constraintBottom_toTopOf="@+id/loosers"
         app:layout_constraintEnd_toEndOf="@+id/winner1"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/winner1"
-        app:layout_constraintTop_toTopOf="@+id/crown2"
-        app:layout_constraintVertical_bias="0.473" />
+        app:layout_constraintTop_toBottomOf="@+id/winner1"
+        app:layout_constraintVertical_bias="0.433" />
 
     <TextView
         android:id="@+id/looser1"
@@ -157,7 +157,7 @@
         app:layout_constraintEnd_toEndOf="@+id/looser1"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/looser1"
-        app:layout_constraintTop_toTopOf="@+id/skull2"
+        app:layout_constraintTop_toTopOf="@+id/ptsl2"
         app:layout_constraintVertical_bias="0.555" />
 
     <ImageView
@@ -165,7 +165,7 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_marginStart="52dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="28dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loosers"
         app:srcCompat="@drawable/danger" />
@@ -178,6 +178,8 @@
         android:layout_marginBottom="156dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/skull1"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/danger" />
 
     <TextView
@@ -208,10 +210,12 @@
         android:text="pts"
         android:textColor="#6a0dad"
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/loosers"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/winner2"
-        app:layout_constraintTop_toBottomOf="@+id/ptsw1" />
+        app:layout_constraintTop_toBottomOf="@+id/ptsw1"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/ptsl1"
@@ -234,7 +238,7 @@
         android:id="@+id/ptsl2"
         android:layout_width="60dp"
         android:layout_height="42dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="44dp"
         android:layout_marginEnd="36dp"
         android:ems="10"
         android:fontFamily="casual"

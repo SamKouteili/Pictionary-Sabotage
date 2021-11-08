@@ -106,7 +106,7 @@ public class PodiumActivity extends AppCompatActivity {
                 String name3 = allPlayers.get(2).getPlayerName();
                 String points3 = allPlayers.get(2).getScore() + " pts.";
 
-                if (roomData.players.get(name1).equals("Saboteur")) {
+                if (!roomData.players.get(name1).equals("Saboteur")) {
                     winner1.setText(name1);
                     ptsw1.setText(points1);
                     winner2.setVisibility(View.INVISIBLE);
