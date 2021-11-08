@@ -37,7 +37,7 @@ public class GuesserActivity extends AppCompatActivity {
     EditText input_text;
     private DrawerView guesser_view;
 
-    private long timeLeftToDraw = 20000; // 20 seconds
+    private long timeLeftToDraw = 30000; // 30 seconds
     private CountDownTimer countDownTimer;
     private TextView countdownText;
 
