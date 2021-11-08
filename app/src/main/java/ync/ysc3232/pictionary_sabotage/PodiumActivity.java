@@ -43,7 +43,6 @@ public class PodiumActivity extends AppCompatActivity {
 
 
     //Default values for the winners
-    private final PlayerDbModel sample = new PlayerDbModel("TestPlayer", "Drawer", 42);
     private ArrayList<PlayerDbModel> allPlayers = new ArrayList<>();
     private String roomId;
 
@@ -87,58 +86,52 @@ public class PodiumActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 roomData = task.getResult().child(roomId).getValue(RoomData.class);
 
+                String guesserID = "";
+                String saboteurID = "";
+                String drawerID = "";
+
                 for (String id : roomData.players.keySet()) {
-                    String role = roomData.players.get(id);
-                    int score = roomData.scores.get(id);
-                    PlayerDbModel p = new PlayerDbModel(id, role, score);
-                    allPlayers.add(p);
-                }
-
-                if (allPlayers.isEmpty()) {
-                    Log.e("Fetching Podium Data", "Podium Data empty");
-                }
-
-                int i = 0;
-                for (PlayerDbModel p : allPlayers){
-                    if (p.getScore() < allPlayers.get(0).getScore()){
-                        PlayerDbModel tmp = allPlayers.get(0);
-                        allPlayers.set(0, p);
-                        allPlayers.set(i, tmp);
+                    if (roomData.players.get(id).equals("Guesser")){
+                        guesserID = id;
+                    } else if (roomData.players.get(id).equals("Saboteur")){
+                        saboteurID = id;
+                    } else {
+                        drawerID = id;
                     }
-                    i++;
+
                 }
 
                 // allPlayers.sort(Comparator.comparing(PlayerDbModel::getScore));
+//
+//                String name1 = allPlayers.get(0).getPlayerName();
+//                String points1 = allPlayers.get(0).getScore() + " pts.";
+//                String name2 = allPlayers.get(1).getPlayerName();
+//                String points2 = allPlayers.get(1).getScore() + " pts.";
+//                String name3 = allPlayers.get(2).getPlayerName();
+//                String points3 = allPlayers.get(2).getScore() + " pts.";
 
-                String name1 = allPlayers.get(0).getPlayerName();
-                String points1 = allPlayers.get(0).getScore() + " pts.";
-                String name2 = allPlayers.get(1).getPlayerName();
-                String points2 = allPlayers.get(1).getScore() + " pts.";
-                String name3 = allPlayers.get(2).getPlayerName();
-                String points3 = allPlayers.get(2).getScore() + " pts.";
-
-                if (allPlayers.get(0).getRole().equals("Saboteur")) {
-                    winner1.setText(name1);
-                    ptsw1.setText(points1);
+                if (roomData.scores.get(saboteurID) > roomData.scores.get(guesserID)) {
+                    winner1.setText(saboteurID);
+                    ptsw1.setText(roomData.scores.get(saboteurID));
                     winner2.setVisibility(View.INVISIBLE);
                     ptsw2.setVisibility(View.INVISIBLE);
                     crown2.setVisibility(View.INVISIBLE);
 
-                    looser1.setText(name2);
-                    ptsl1.setText(points2);
-                    looser2.setText(name3);
-                    ptsl2.setText(points3);
+                    looser1.setText(guesserID);
+                    ptsl1.setText(roomData.scores.get(guesserID));
+                    looser2.setText(drawerID);
+                    ptsl2.setText(roomData.scores.get(guesserID));
                 } else {
-                    looser1.setText(name1);
-                    ptsl1.setText(points1);
+                    looser1.setText(saboteurID);
+                    ptsl1.setText(roomData.scores.get(saboteurID));
                     looser2.setVisibility(View.INVISIBLE);
                     ptsl2.setVisibility(View.INVISIBLE);
                     skull2.setVisibility(View.INVISIBLE);
 
-                    winner1.setText(name2);
-                    ptsw1.setText(points2);
-                    winner2.setText(name3);
-                    ptsw2.setText(points3);
+                    winner1.setText(guesserID);
+                    ptsw1.setText(roomData.scores.get(guesserID));
+                    winner2.setText(drawerID);
+                    ptsw2.setText(roomData.scores.get(guesserID));
                 }
             }
         });
