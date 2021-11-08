@@ -62,32 +62,58 @@ public class RandomWordGenerator extends AppCompatActivity {
         countdownText = findViewById(R.id.countdown_text);
         randomWord = findViewById(R.id.randomWord);
 
-        database.child("Rooms").addValueEventListener(new ValueEventListener() {
+        database.child("Rooms").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                roomData = snapshot.child(roomId).getValue(RoomData.class);
-                int round = roomData.getRoundNum();
-                if (round < 5) {
-                    randomWordString = roomData.fiveWords.get(round);
-                    if (roomData.players.get(getCurrentUser()).equals("Guesser")){
-                        randomWord.setText(R.string.guesserText);
-                    } else {
-                        randomWord.setText(randomWordString);
-                    }
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                } else {
+                    roomData = task.getResult().child(roomId).getValue(RoomData.class);
+                    int round = roomData.getRoundNum();
+                    if (round < 5) {
+                        randomWordString = roomData.fiveWords.get(round);
+                        if (roomData.players.get(getCurrentUser()).equals("Guesser")) {
+                            randomWord.setText(R.string.guesserText);
+                        } else {
+                            randomWord.setText(randomWordString);
+                        }
 
-                    //Only start time when word is generated
-                    if (!timer_started){
-                        startTimer();
-                        timer_started = true;
+                        //Only start time when word is generated
+                        if (!timer_started) {
+                            startTimer();
+                            timer_started = true;
+                        }
                     }
                 }
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("firebase", "Data not retrieved");
-            }
         });
+
+//        database.child("Rooms").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                roomData = snapshot.child(roomId).getValue(RoomData.class);
+//                int round = roomData.getRoundNum();
+//                if (round < 5) {
+//                    randomWordString = roomData.fiveWords.get(round);
+//                    if (roomData.players.get(getCurrentUser()).equals("Guesser")){
+//                        randomWord.setText(R.string.guesserText);
+//                    } else {
+//                        randomWord.setText(randomWordString);
+//                    }
+//
+//                    //Only start time when word is generated
+//                    if (!timer_started){
+//                        startTimer();
+//                        timer_started = true;
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                Log.e("firebase", "Data not retrieved");
+//            }
+//        });
 
 //        finish = findViewById(R.id.finish);
 //        finish.setOnClickListener(new View.OnClickListener() {
@@ -125,27 +151,47 @@ public class RandomWordGenerator extends AppCompatActivity {
             public void onFinish() {
                 String curUsr = getCurrentUser();
 
-                database.child("Rooms").addValueEventListener(new ValueEventListener() {
+                database.child("Rooms").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        roomData = snapshot.child(roomId).getValue(RoomData.class);
-                        if (curUsr == null){
-                            Log.d("usrID", "usrID empty???");
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (!task.isSuccessful()) {
+                            Log.e("firebase", "Error getting data", task.getException());
+                        } else {
+                            roomData = task.getResult().child(roomId).getValue(RoomData.class);
+                            if (curUsr == null){
+                                Log.d("usrID", "usrID empty???");
+                            }
+                            currRole = roomData.players.get(curUsr);
+
+                            Intent intent = assign_intent(currRole);
+                            intent.putExtra("round word", randomWordString);
+                            intent.putExtra("round num", roomData.getRoundNum());
+                            intent.putExtra("roomID", roomId);
+                            startActivity(intent);
                         }
-                        currRole = roomData.players.get(curUsr);
-
-                        Intent intent = assign_intent(currRole);
-                        intent.putExtra("round word", randomWordString);
-                        intent.putExtra("round num", roomData.getRoundNum());
-                        intent.putExtra("roomID", roomId);
-                        startActivity(intent);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.e("firebase", "Could not get room in RandomWordGenerator");
                     }
                 });
+//                database.child("Rooms").addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                        roomData = snapshot.child(roomId).getValue(RoomData.class);
+//                        if (curUsr == null){
+//                            Log.d("usrID", "usrID empty???");
+//                        }
+//                        currRole = roomData.players.get(curUsr);
+//
+//                        Intent intent = assign_intent(currRole);
+//                        intent.putExtra("round word", randomWordString);
+//                        intent.putExtra("round num", roomData.getRoundNum());
+//                        intent.putExtra("roomID", roomId);
+//                        startActivity(intent);
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//                        Log.e("firebase", "Could not get room in RandomWordGenerator");
+//                    }
+//                });
 
             }
         }.start();
