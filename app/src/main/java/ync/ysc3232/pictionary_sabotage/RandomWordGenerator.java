@@ -87,47 +87,6 @@ public class RandomWordGenerator extends AppCompatActivity {
                 }
             }
         });
-
-//        database.child("Rooms").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                roomData = snapshot.child(roomId).getValue(RoomData.class);
-//                int round = roomData.getRoundNum();
-//                if (round < 5) {
-//                    randomWordString = roomData.fiveWords.get(round);
-//                    if (roomData.players.get(getCurrentUser()).equals("Guesser")){
-//                        randomWord.setText(R.string.guesserText);
-//                    } else {
-//                        randomWord.setText(randomWordString);
-//                    }
-//
-//                    //Only start time when word is generated
-//                    if (!timer_started){
-//                        startTimer();
-//                        timer_started = true;
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                Log.e("firebase", "Data not retrieved");
-//            }
-//        });
-
-//        finish = findViewById(R.id.finish);
-//        finish.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                stopTimer();
-//                database.child("Rooms").child(roomId).child("gameStarted").setValue(false);
-//                finish();
-//                Intent intent = new Intent(RandomWordGenerator.this, PodiumActivity.class);
-//                intent.putExtra("roomID", roomId);
-//                startActivity(intent);
-//            }
-//        });
-
     }
 
     /**
