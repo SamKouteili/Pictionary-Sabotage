@@ -36,21 +36,21 @@ import java.util.Set;
  */
 public class DrawerView extends View {
 
-    DatabaseReference canvas_db = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
-            .getReference().child("Canvas");
-
+    DatabaseReference drawing_canvas_db;
+    DatabaseReference erasing_canvas_db;
     private Path draw_path;
     private Paint brush;
     private Paint canvas_paint;
     private Canvas draw_canvas;
     private Bitmap canvas_bitmap;
-    private int paint_color = Color.BLACK;
+    private int paint_color;
     private float brush_size;
     private boolean can_draw;
     private Segment curr_segment;
 
     private void init(){
         this.setBackgroundColor(Color.WHITE);
+        paint_color = Color.BLACK;
         brush_size = 8f;
         draw_path = new Path();
         canvas_paint = new Paint(Paint.DITHER_FLAG);
@@ -63,10 +63,23 @@ public class DrawerView extends View {
         brush.setStrokeJoin(Paint.Join.ROUND);
         brush.setStrokeCap(Paint.Cap.ROUND);
         can_draw = false;
+    }
 
-        can_draw = true;
+    public DrawerView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
 
-        canvas_db.addChildEventListener(new ChildEventListener() {
+    // You have to run this after you make the room.
+    public void setCanvas_db(String room_id){
+
+        drawing_canvas_db = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
+                .getReference().child("Canvases").child(room_id).child("draw_canvas");
+        erasing_canvas_db = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
+                .getReference().child("Canvases").child(room_id).child("erase_canvas");
+
+
+        drawing_canvas_db.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Log.d("CHILD LISTEN", "added!");
@@ -82,7 +95,60 @@ public class DrawerView extends View {
                             Iterator<DataSnapshot> x_list = snapshot.child("x_points").getChildren().iterator();
                             Iterator<DataSnapshot> y_list = snapshot.child("y_points").getChildren().iterator();
 
-                            Segment segment = new Segment(paint_color, brush_size);
+                            Segment segment = new Segment(Color.BLACK, 8f);
+
+                            while(x_list.hasNext() && y_list.hasNext()){
+                                float x = x_list.next().getValue(Double.class).floatValue();
+                                float y = y_list.next().getValue(Double.class).floatValue();
+                                segment.addPoints(x, y);
+                            }
+                            drawSegment(segment, brush);
+//                            Log.d("POINTS", "points length: "+segment.getPoints().size());
+                            break;
+                        case "points": //changed size
+                            Log.d("SIZE", "size: "+snapshot.getValue().toString());
+                            break;
+                        default: //changed color
+                            Log.d("COLOR", "color: "+snapshot.getValue().toString());
+                            break;
+                    }
+                }
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                Log.d("CHILD LISTEN", "removed!");
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        erasing_canvas_db.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Log.d("CHILD LISTEN", "added!");
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Log.d("CHILD LISTEN", "changed! ");
+                if(snapshot.exists()){
+                    if(previousChildName == null) previousChildName = "";
+                    switch(previousChildName){
+                        case "color": //changed points
+                            Iterator<DataSnapshot> x_list = snapshot.child("x_points").getChildren().iterator();
+                            Iterator<DataSnapshot> y_list = snapshot.child("y_points").getChildren().iterator();
+
+                            Segment segment = new Segment(Color.GREEN, 25f);
 
                             while(x_list.hasNext() && y_list.hasNext()){
                                 float x = x_list.next().getValue(Double.class).floatValue();
@@ -120,34 +186,28 @@ public class DrawerView extends View {
         });
     }
 
-    public DrawerView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
-    }
-
-
-    public void setCanDraw(boolean b){
-        can_draw = b;
+    public void setCanDraw(boolean can_draw){
+        this.can_draw = can_draw;
     }
 
     /**
      * Drawing and Erasing Mode functions for DrawingActivity
      */
-    public void EraserMode(){
+    public void eraserMode(){
         paint_color = Color.GREEN;
         brush.setColor(paint_color);
         brush_size = 25f;
         brush.setStrokeWidth(brush_size);
 
     }
-    public void DrawingMode(){
+    public void drawingMode(){
         paint_color = Color.BLACK;
         brush.setColor(paint_color);
         brush_size = 8f;
         brush.setStrokeWidth(brush_size);
     }
 
-    public void ClearCanvas(){
+    public void clearCanvas(){
         canvas_bitmap = Bitmap.createBitmap(canvas_bitmap.getWidth(), canvas_bitmap.getHeight(), Bitmap.Config.ARGB_8888);
         draw_canvas = new Canvas(canvas_bitmap);
         invalidate();
@@ -186,6 +246,9 @@ public class DrawerView extends View {
     }
 
     private void pushSegment(Segment segment){
+        DatabaseReference canvas_db = erasing_canvas_db;
+        if(paint_color == Color.BLACK) canvas_db = drawing_canvas_db;
+
         canvas_db.child("color").setValue(segment.getColor());
         canvas_db.child("size").setValue(segment.getSize());
         List<Point> points = segment.getPoints();
