@@ -34,7 +34,6 @@ public class WaitingRoom extends AppCompatActivity {
     DatabaseReference rooms_database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
             .getReference().child("Rooms");
 
-//    String[] roles = {"Undecided", "Guesser", "Saboteur", "Drawer"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
