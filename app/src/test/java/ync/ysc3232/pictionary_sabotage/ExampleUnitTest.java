@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,9 +34,30 @@ public class ExampleUnitTest {
         assert(s.getPlayerName().equals("Bob"));
     }
 
+    List<String> fiveWords = Arrays.asList("table", "mountain", "hat", "moose", "cat");
+
+    @Test
+    public void roomDataStartGame () {
+        RoomData room = new RoomData("2402", fiveWords);
+        room.addPlayer("John", "Guesser");
+        assertFalse(room.isGameStarted());
+        room.setGameStarted(true);
+        assert(room.isGameStarted());
+        assertEquals(room.getFiveWords(), fiveWords);
+        room.setGameStarted(false);
+    }
+
+    @Test
+    public void roomDataRound () {
+        RoomData room = new RoomData("2402", fiveWords);
+        assertEquals(room.getRoundNum(), 0);
+        room.incrementRoundNum();
+        assertEquals(room.getRoundNum(), 1);
+    }
+
     @Test
     public void roomDataRoomIDTest () {
-        RoomData room = new RoomData("2402");
+        RoomData room = new RoomData("2402", fiveWords);
         assertEquals(room.getRoomId(), "2402");
         room.setRoomId("Potato");
         assertEquals(room.getRoomId(), "Potato");
@@ -42,7 +65,7 @@ public class ExampleUnitTest {
 
     @Test
     public void roomDataScoreTest () {
-        RoomData room = new RoomData("2402");
+        RoomData room = new RoomData("2402", fiveWords);
         room.addPlayer("John", "Guesser");
         room.addScoreTo("John");
         room.addScoreTo("John");
@@ -51,14 +74,19 @@ public class ExampleUnitTest {
         int score = scores.getOrDefault("John", 0);
         assertEquals(score, 3);
     }
+
     @Test
-    public void roomDataSetPlayersTest () {
-        RoomData room = new RoomData("2402");
+    public void roomDataSetChangePlayersTest () {
+        RoomData room = new RoomData("2402", fiveWords);
         room.addPlayer("John", "Guesser");
         assertFalse(room.isGameStarted());
         Map<String, String> players = room.getPlayers();
         String role = players.getOrDefault("John", "");
         assert (role.equals("Guesser"));
+        room.changePLayerRole("John", "Saboteur");
+        players = room.getPlayers();
+        role = players.getOrDefault("John", "");
+        assert (role.equals("Saboteur"));
     }
 
 

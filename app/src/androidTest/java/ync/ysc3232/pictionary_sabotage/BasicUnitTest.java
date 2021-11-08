@@ -61,7 +61,7 @@ public class BasicUnitTest {
     }
 
     @Test
-    public void joinRoomButtoGoesToWaitingRoom() {
+    public void joinRoomButtonGoesToWaitingRoom() {
         onView(withId(R.id.startGameButton)).perform(click());
 
         //Enter some random room that exists on database but is not started
@@ -90,5 +90,15 @@ public class BasicUnitTest {
         onData(allOf(is(instanceOf(String.class)), is("Drawer"))).perform(click());
         onView(withId(R.id.chooseRole1)).check(matches(withSpinnerText(containsString("Drawer"))));
     }
+
+//    @Test
+//    public void LoginPage() {
+//        onView(withId(R.id.setEmail)).perform(typeText("jack@gmail.com"));
+//        onView(withId(R.id.setEmail)).perform(typeText("njsrukfagdk"));
+//        onView(withId(R.id.LoginButton)).perform(click());
+//
+//        //Check if view change by checking if we can see button createRoom
+//        onView(withId(R.id.startGameButton)).check(matches(isDisplayed()));
+//    }
 
 }
