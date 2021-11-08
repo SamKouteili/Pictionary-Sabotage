@@ -103,8 +103,8 @@ public class PodiumActivity extends AppCompatActivity {
                 String points1 = allPlayers.get(0).getScore() + " pts.";
                 String name2 = allPlayers.get(1).getPlayerName();
                 String points2 = allPlayers.get(1).getScore() + " pts.";
-//                String name3 = allPlayers.get(2).getPlayerName();
-//                String points3 = allPlayers.get(2).getScore() + " pts.";
+                String name3 = allPlayers.get(2).getPlayerName();
+                String points3 = allPlayers.get(2).getScore() + " pts.";
 
                 if (roomData.players.get(name1).equals("Saboteur")) {
                     winner1.setText(name1);
@@ -113,13 +113,13 @@ public class PodiumActivity extends AppCompatActivity {
                     ptsw2.setVisibility(View.INVISIBLE);
                     crown2.setVisibility(View.INVISIBLE);
 
-//                    looser1.setText(name2);
-//                    ptsl1.setText(points2);
-//                    looser2.setText(name3);
-//                    ptsl2.setText(points3);
+                    looser1.setText(name2);
+                    ptsl1.setText(points2);
+                    looser2.setText(name3);
+                    ptsl2.setText(points3);
                 } else {
-//                    looser1.setText(name1);
-//                    ptsl1.setText(points1);
+                    looser1.setText(name1);
+                    ptsl1.setText(points1);
                     looser2.setVisibility(View.INVISIBLE);
                     ptsl2.setVisibility(View.INVISIBLE);
                     skull2.setVisibility(View.INVISIBLE);
