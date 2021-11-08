@@ -57,17 +57,18 @@ public class SaboteurActivity extends AppCompatActivity {
 
         Log.d("TAGGG", getCurrentUser() + " is in SaboteurActivity");
 
-        saboteur_view = (DrawerView) findViewById(R.id.saboteur_view);
-        saboteur_view.EraserMode();
-        countdownText = findViewById(R.id.countDown_draw);
-        can_sabotage = false;
-        has_sabotaged = false;
-        saboteur_button = (Button) findViewById(R.id.sabotage_button);
-
         // Set room Id
         Bundle bundle = getIntent().getExtras();
         roomID = bundle.getString("roomID");
         cur_round = bundle.getInt("round num");
+
+        saboteur_view = (DrawerView) findViewById(R.id.saboteur_view);
+        saboteur_view.setCanvas_db(roomID);
+        saboteur_view.eraserMode();
+        countdownText = findViewById(R.id.countDown_draw);
+        can_sabotage = false;
+        has_sabotaged = false;
+        saboteur_button = (Button) findViewById(R.id.sabotage_button);
 
         room_database.addValueEventListener(new ValueEventListener() {
             @Override
