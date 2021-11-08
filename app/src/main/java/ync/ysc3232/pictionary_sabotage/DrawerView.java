@@ -148,7 +148,7 @@ public class DrawerView extends View {
                             Iterator<DataSnapshot> x_list = snapshot.child("x_points").getChildren().iterator();
                             Iterator<DataSnapshot> y_list = snapshot.child("y_points").getChildren().iterator();
 
-                            Segment segment = new Segment(Color.GREEN, 25f);
+                            Segment segment = new Segment(Color.WHITE, 40f);
 
                             while(x_list.hasNext() && y_list.hasNext()){
                                 float x = x_list.next().getValue(Double.class).floatValue();
@@ -194,9 +194,9 @@ public class DrawerView extends View {
      * Drawing and Erasing Mode functions for DrawingActivity
      */
     public void eraserMode(){
-        paint_color = Color.GREEN;
+        paint_color = Color.WHITE;
         brush.setColor(paint_color);
-        brush_size = 25f;
+        brush_size = 40f;
         brush.setStrokeWidth(brush_size);
 
     }
