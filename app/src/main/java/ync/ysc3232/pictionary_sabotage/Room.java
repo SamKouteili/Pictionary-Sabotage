@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -36,6 +38,7 @@ public class Room extends AppCompatActivity {
     private EditText eneteredRoomId;
     private boolean validRoomId;
     private RoomData roomData;
+    private String currRoomId;
 
 
     DatabaseReference database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
@@ -63,29 +66,38 @@ public class Room extends AppCompatActivity {
                     words_nums.add(Integer.valueOf(i));
                 }
 
-                database.child("random_words").addValueEventListener(new ValueEventListener() {
+                Log.d("Room", "Clicked on CreateRoom with a new roomId " + roomId.toString());
+
+                //Instead of using OnDataChange - we just get once and don't listen to change
+                database.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        DatabaseReference newRoom = database.child("Rooms").child(roomId);
-                        int j = 0;
-                        for (int i : words_nums) {
-                            random_words[j] = snapshot.child(String.valueOf(i)).getValue().toString();
-                            j += 1;
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (!task.isSuccessful()) {
+                            Log.e("firebase", "Error getting data", task.getException());
                         }
-                        roomData = new RoomData(roomId, Arrays.asList(random_words));
-                        roomData.addPlayer(getCurrentUser(), "Undecided");
-                        newRoom.setValue(roomData);
+                        else {
+                            DataSnapshot snapshot = task.getResult();
+                            //Generate new room on database
+                            DatabaseReference newRoom = database.child("Rooms").child(roomId);
 
-                        //Passing room Id using intent
-                        //https://stackoverflow.com/questions/2091465/how-do-i-pass-data-between-activities-in-android-application#:~:text=The%20easiest%20way%20to%20do,sessionId)%3B%20startActivity(intent)%3B
-                        Intent intent = new Intent(Room.this, WaitingRoom.class);
-                        intent.putExtra("roomId", roomId);
-                        startActivity(intent);
-                    }
+                            //Generate its random words
+                            int j = 0;
+                            for (int i : words_nums) {
+                                random_words[j] = snapshot.child("random_words").child(String.valueOf(i)).getValue().toString();
+                                j += 1;
+                            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                            //Push data of new room
+                            roomData = new RoomData(roomId, Arrays.asList(random_words));
+                            roomData.addPlayer(getCurrentUser(), "Undecided");
+                            newRoom.setValue(roomData);
 
+                            //Passing room Id using intent
+                            Log.d("Room", "Intent created to WaitingRoom with roomId " + roomId.toString());
+                            Intent intent = new Intent(Room.this, WaitingRoom.class);
+                            intent.putExtra("roomId", roomId);
+                            startActivity(intent);
+                        }
                     }
                 });
             }

@@ -29,6 +29,7 @@ import java.util.Map;
 public class WaitingRoom extends AppCompatActivity {
 
     RoomData roomData;
+    String roomId;
     //Access rooms database
     DatabaseReference rooms_database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
             .getReference().child("Rooms");
@@ -65,8 +66,9 @@ public class WaitingRoom extends AppCompatActivity {
 
         //Set room Id
         Bundle bundle = getIntent().getExtras();
-        String roomId = bundle.getString("roomId");
+        roomId = bundle.getString("roomId");
         roomIdText.setText(roomId);
+        Log.d("WaitingROom", "Enter Waiting Room with roomId " + roomId);
 
 
         startGame.setOnClickListener(new View.OnClickListener(){
@@ -76,16 +78,16 @@ public class WaitingRoom extends AppCompatActivity {
                 // If all players chose unique roles, then update database to start game
 
                 if (playersChoseRoles(roomData.players)){
-                    Log.d("StartGame", "Clicked and all players chose roles");
                     if (allRolesUnique(roomData.players)){
                         startGame.setError(null);
                         roomData.setGameStarted(true);
                         rooms_database.child(roomId).setValue(roomData);
                     } else {
+                        Log.d("WaitingRoom", "Players must chose different roles!");
                         startGame.setError("Players must chose different roles!");
                     }
                 } else {
-                    Log.d("StartGame", "Clicked and all players did not chose roles");
+                    Log.d("WaitingRoom", "All players must chose a role!");
                     startGame.setError("All players must chose a role!");
                 }
 
@@ -93,20 +95,21 @@ public class WaitingRoom extends AppCompatActivity {
         });
 
         //Get room data and players to set the Text and Spinners on screen
-        rooms_database.addValueEventListener(new ValueEventListener() {
+        rooms_database.child(roomId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                roomData = snapshot.child(roomId).getValue(RoomData.class);
+                roomData = snapshot.getValue(RoomData.class);
 
                 //If the data update says game has started - move to next page
                 if (roomData.isGameStarted()) {
+                    Log.d("WaitingROom", "Game Started for " + roomId);
                     Intent intent = new Intent(WaitingRoom.this, RandomWordGenerator.class);
                     intent.putExtra("roomID", roomId);
                     startActivity(intent);
                 } else {
                     int i = 0;
-                    roomData = snapshot.child(roomId).getValue(RoomData.class);
-                    for (DataSnapshot playerSnapShot : snapshot.child(roomId).child("players").getChildren()) {
+                    roomData = snapshot.getValue(RoomData.class);
+                    for (DataSnapshot playerSnapShot : snapshot.child("players").getChildren()) {
                         Log.d("waitingRoom", "Players include " + playerSnapShot.getKey());
                         playersText[i].setText(playerSnapShot.getKey());
                         spinners[i].setEnabled(true);
@@ -115,7 +118,6 @@ public class WaitingRoom extends AppCompatActivity {
                         i += 1;
                     }
                 }
-
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

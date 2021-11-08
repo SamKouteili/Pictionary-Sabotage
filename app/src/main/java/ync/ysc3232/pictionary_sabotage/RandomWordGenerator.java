@@ -52,12 +52,12 @@ public class RandomWordGenerator extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_random_word_generator);
-        Log.d("Classes", getCurrentUser() + " is in RamdomWordGenerator");
 
         //Get the room id
         Bundle bundle = getIntent().getExtras();
         roomId = bundle.getString("roomID");
         timer_started = false;
+        Log.d("Classes", getCurrentUser() + " is in RamdomWordGenerator with roomId" + roomId);
 
         countdownText = findViewById(R.id.countdown_text);
         randomWord = findViewById(R.id.randomWord);
