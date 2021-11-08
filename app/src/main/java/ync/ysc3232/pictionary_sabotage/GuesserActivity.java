@@ -28,6 +28,7 @@ public class GuesserActivity extends AppCompatActivity {
     String roomID;
     RoomData roomData;
     private int cur_round;
+    private String curUsr;
     // Access rooms database
     DatabaseReference room_database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
             .getReference().child("Rooms");
@@ -44,8 +45,9 @@ public class GuesserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guesser);
+        curUsr = getCurrentUser();
 
-        Log.d("Classes", getCurrentUser() + " is in GuesserActivity");
+        Log.d("Classes", curUsr + " is in GuesserActivity");
 
         input_text = findViewById(R.id.GuesserInput);
         guesser_view = (DrawerView) findViewById(R.id.drawer_view);
@@ -127,6 +129,7 @@ public class GuesserActivity extends AppCompatActivity {
 
                 // Set Game ended to true (necessary for Drawer and Saboteur)
                 roomData.incrementRoundNum();
+                Log.d("TAGGG", curUsr + " is incrementing Round NUmber");
 
                 // Update Database (also acts as ping)
                 room_database.child(roomID).setValue(roomData);
@@ -147,6 +150,7 @@ public class GuesserActivity extends AppCompatActivity {
      */
     private void updateSaboteurScore(){
         // Round ended and word not guessed; Update score for Saboteur
+        Log.d("TAGGG", curUsr + " is updating saboteur scores");
         for (String id : roomData.players.keySet()) {
             if (roomData.players.get(id).equals("Saboteur")) {
                 int count = roomData.scores.containsKey(id) ? roomData.scores.get(id) : 0;
@@ -160,6 +164,7 @@ public class GuesserActivity extends AppCompatActivity {
      */
     private void updateGuesserAndDrawerScore(){
         // Update score for Drawer and Guesser
+        Log.d("TAGGG", curUsr + " is updating guesser and drawer scores");
         for (String id : roomData.players.keySet()) {
             if (!roomData.players.get(id).equals("Saboteur")) {
                 int count = roomData.scores.containsKey(id) ? roomData.scores.get(id) : 0;

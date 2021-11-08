@@ -48,7 +48,7 @@ public class DrawingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_drawing);
 
 
-        Log.d("Classes", getCurrentUser() + " is in DrawingActivity");
+        Log.d("TAGGG", getCurrentUser() + " is in DrawingActivity");
 
         drawer_view = (DrawerView)findViewById(R.id.drawer_view);
         drawer_view.setCanDraw(true);
@@ -144,6 +144,7 @@ public class DrawingActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                Log.d("TAGGG", getCurrentUser() + " DrawingActivity timer finished");
                 // should technically wait for GuesserActivity
 //                Intent intent = new Intent(DrawingActivity.this, RandomWordGenerator.class);
 //                intent.putExtra("roomID", roomID);
