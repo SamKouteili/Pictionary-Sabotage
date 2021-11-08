@@ -5,6 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * RoomData stores all the data about a unique room ID.
+ * This data includes number of players, player IDs and their respective roles and scores,
+ * whether the game has started and other information.
+ * RoomData acts as a method of storing data on the database, and when data fetched, we can get
+ * it in the form of this class.
+ */
+
+
 public class RoomData {
 
     String roomId;
