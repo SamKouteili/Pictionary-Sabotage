@@ -35,6 +35,9 @@ android {
     useLibrary 'android.test.runner'
     useLibrary 'android.test.base'
     useLibrary 'android.test.mock'
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -44,16 +47,14 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation 'com.google.firebase:firebase-analytics:17.2.2'
     implementation 'com.google.firebase:firebase-auth:21.0.1'
+    implementation 'androidx.navigation:navigation-fragment:2.3.5'
+    implementation 'androidx.navigation:navigation-ui:2.3.5'
+    implementation 'com.google.firebase:firebase-database:20.0.2'
     implementation 'com.google.firebase:firebase-database:20.0.2'
 
-    // Core library
-    androidTestImplementation 'androidx.test:core:1.4.0'
+    implementation 'com.google.firebase:firebase-database:19.2.1'
+    testImplementation 'junit:junit:4.+'
 
-    // AndroidJUnitRunner and JUnit Rules
-    androidTestImplementation 'androidx.test:runner:1.4.0'
-    androidTestImplementation 'androidx.test:rules:1.4.0'
-
-    // Assertions
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.ext:truth:1.4.0'
     androidTestImplementation 'com.google.truth:truth:1.0.1'

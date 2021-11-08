@@ -19,6 +19,15 @@
         <uses-library android:name="android.test.mock"
             android:required="false" />
         <activity
+            android:name=".WaitingRoomOnJoin"
+            android:exported="true" />
+        <activity
+            android:name=".GuesserActivity"
+            android:exported="true" />
+        <activity
+            android:name=".SaboteurActivity"
+            android:exported="true" />
+        <activity
             android:name=".WaitingRoom"
             android:exported="true" />
         <activity
