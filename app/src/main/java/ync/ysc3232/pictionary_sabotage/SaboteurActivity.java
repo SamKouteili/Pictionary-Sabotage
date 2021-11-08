@@ -134,7 +134,6 @@ public class SaboteurActivity extends AppCompatActivity {
                 has_sabotaged = false;
                 saboteur_button.setBackgroundResource(R.drawable.green_button);
                 saboteur_button.setText(go);
-                Log.d("TAGGG", "Waittimer Finish");
             }
         }.start();
     }
@@ -158,7 +157,6 @@ public class SaboteurActivity extends AppCompatActivity {
                 can_sabotage = false;
                 saboteur_button.setBackgroundResource(R.drawable.red_button);
                 // call waitTimer() when sabotageTimer finishes
-                Log.d("TAGGG", "SabotageTimer Finish");
                 waitTimer();
             }
         }.start();
@@ -182,19 +180,12 @@ public class SaboteurActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 if (sabotageTimer != null){
-                    Log.d("TAGGG", "SabotageTimer cancel");
                     sabotageTimer.cancel();
                 }
                 if (waitTimer != null){
-                    Log.d("TAGGG", "waitTimer cancel");
                     waitTimer.cancel();
                 }
-
-                Log.d("TAGGG", "startTimer Finish");
-//                Intent intent = new Intent(SaboteurActivity.this, RandomWordGenerator.class);
-//                intent.putExtra("roomID", roomID);
-//                startActivity(intent);
-
+                Log.d("TAGGG", "startTimer Finish in Saboteur");
             }
         }.start();
     }

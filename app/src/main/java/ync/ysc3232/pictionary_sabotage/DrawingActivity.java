@@ -145,10 +145,6 @@ public class DrawingActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 Log.d("TAGGG", getCurrentUser() + " DrawingActivity timer finished");
-                // should technically wait for GuesserActivity
-//                Intent intent = new Intent(DrawingActivity.this, RandomWordGenerator.class);
-//                intent.putExtra("roomID", roomID);
-//                startActivity(intent);
             }
         }.start();
     }

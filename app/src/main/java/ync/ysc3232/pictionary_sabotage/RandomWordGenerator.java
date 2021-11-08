@@ -32,7 +32,6 @@ public class RandomWordGenerator extends AppCompatActivity {
     private TextView randomWord;
     private CountDownTimer countDownTimer;
     private long timeLeftInMilliseconds = 5000;
-    private Button finish;
     private String roomId;
     private RoomData roomData;
     private String currRole;
@@ -57,7 +56,7 @@ public class RandomWordGenerator extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         roomId = bundle.getString("roomID");
         timer_started = false;
-        Log.d("TAGGG", getCurrentUser() + " is in RamdomWordGenerator with roomId" + roomId);
+        Log.d("TAGGG", getCurrentUser() + " is in RandomWordGenerator. roomId" + roomId);
 
         countdownText = findViewById(R.id.countdown_text);
         randomWord = findViewById(R.id.randomWord);
@@ -130,28 +129,6 @@ public class RandomWordGenerator extends AppCompatActivity {
                         }
                     }
                 });
-//                database.child("Rooms").addValueEventListener(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                        roomData = snapshot.child(roomId).getValue(RoomData.class);
-//                        if (curUsr == null){
-//                            Log.d("usrID", "usrID empty???");
-//                        }
-//                        currRole = roomData.players.get(curUsr);
-//
-//                        Intent intent = assign_intent(currRole);
-//                        intent.putExtra("round word", randomWordString);
-//                        intent.putExtra("round num", roomData.getRoundNum());
-//                        intent.putExtra("roomID", roomId);
-//                        startActivity(intent);
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError error) {
-//                        Log.e("firebase", "Could not get room in RandomWordGenerator");
-//                    }
-//                });
-
             }
         }.start();
     }
@@ -170,13 +147,6 @@ public class RandomWordGenerator extends AppCompatActivity {
                 return i;
         }
         return null;
-    }
-
-    /**
-     * Stops the count down timer.
-     */
-    public void stopTimer() {
-        countDownTimer.cancel();
     }
 
     public String getCurrentUser(){
