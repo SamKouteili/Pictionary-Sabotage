@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,10 +32,16 @@ public class RandomWordGenerator extends AppCompatActivity {
     private TextView randomWord;
     private CountDownTimer countDownTimer;
     private long timeLeftInMilliseconds = 5000;
-    private Button finish;
-    private int num_of_words;
+    private String roomId;
+    private RoomData roomData;
+    private String currRole;
+    private String randomWordString;
+    private boolean timer_started;
 
-    private String[] words = {"tree", "bench", "squirrel", "hat", "nose"};
+
+    //Generate a random word from the string array - get words from data base
+    DatabaseReference database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
+            .getReference();
     /**
      * Instantiates round instance. Choses a random word from the word bank
      * and runs the timer.
@@ -45,54 +52,40 @@ public class RandomWordGenerator extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_random_word_generator);
 
+        //Get the room id
+        Bundle bundle = getIntent().getExtras();
+        roomId = bundle.getString("roomID");
+        timer_started = false;
+        Log.d("TAGGG", getCurrentUser() + " is in RandomWordGenerator. roomId" + roomId);
+
         countdownText = findViewById(R.id.countdown_text);
         randomWord = findViewById(R.id.randomWord);
 
-        //Generate a random word from the string array - get words from data base
-        DatabaseReference rw_database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
-                .getReference().child("random_words");
-
-        rw_database.child("num_words").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        database.child("Rooms").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (!task.isSuccessful()) {
-                    Log.e("firebase", "Error getting number of words", task.getException());
+                    Log.e("firebase", "Error getting data", task.getException());
+                } else {
+                    roomData = task.getResult().child(roomId).getValue(RoomData.class);
+                    int round = roomData.getRoundNum();
+                    if (round < 5) {
+                        randomWordString = roomData.fiveWords.get(round);
+                        if (roomData.players.get(getCurrentUser()).equals("Guesser")) {
+                            randomWord.setText(R.string.guesserText);
+                        } else {
+                            randomWord.setText(randomWordString);
+                        }
+
+                        //Only start time when word is generated
+                        if (!timer_started) {
+                            startTimer();
+                            timer_started = true;
+                        }
+                    }
                 }
-                else {
-//                    Log.d("firebase", "Got number of words " + String.valueOf(task.getResult().getValue()));
-                    num_of_words = Integer.parseInt(String.valueOf(task.getResult().getValue()));
-                }
             }
         });
-
-        //Generate random number
-        int x = (int)(Math.random() * words.length);
-
-        // Read from the database
-        rw_database.child(String.valueOf(x)).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                randomWord.setText(snapshot.getValue().toString());
-
-                //Only start time when word is generated
-                startTimer();
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("firebase", "Data not retrieved");
-            }
-        });
-
-        finish = findViewById(R.id.finish);
-        finish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                stopTimer();
-                Intent intent = new Intent(RandomWordGenerator.this, PodiumActivity.class);
-                startActivity(intent);
-            }
-        });
-
     }
 
     /**
@@ -113,16 +106,55 @@ public class RandomWordGenerator extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                Intent intent = new Intent(RandomWordGenerator.this, DrawingActivity.class);
-                startActivity(intent);
+                String curUsr = getCurrentUser();
+
+                database.child("Rooms").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (!task.isSuccessful()) {
+                            Log.e("firebase", "Error getting data", task.getException());
+                        } else {
+                            roomData = task.getResult().child(roomId).getValue(RoomData.class);
+                            if (curUsr == null){
+                                Log.d("TAGGG", "usrID empty???");
+                            }
+                            currRole = roomData.players.get(curUsr);
+
+                            Intent intent = assign_intent(currRole);
+                            intent.putExtra("round word", randomWordString);
+                            intent.putExtra("round num", roomData.getRoundNum());
+                            intent.putExtra("roomID", roomId);
+                            startActivity(intent);
+                        }
+                    }
+                });
             }
         }.start();
     }
 
-    /**
-     * Stops the count down timer.
-     */
-    public void stopTimer() {
-        countDownTimer.cancel();
+    private Intent assign_intent(@NonNull String role) {
+        Intent i;
+        switch (role){
+            case "Guesser" :
+                i = new Intent(RandomWordGenerator.this, GuesserActivity.class);
+                return i;
+            case "Saboteur" :
+                i = new Intent(RandomWordGenerator.this, SaboteurActivity.class);
+                return i;
+            case "Drawer" :
+                i = new Intent(RandomWordGenerator.this, DrawingActivity.class);
+                return i;
+        }
+        return null;
+    }
+
+    public String getCurrentUser(){
+        //Get current user
+        //Remove the email @
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        String cUsrEmail = mAuth.getCurrentUser().getEmail();
+        int userAt = cUsrEmail.lastIndexOf("@");
+        String userId = cUsrEmail.substring(0, userAt);
+        return userId;
     }
 }

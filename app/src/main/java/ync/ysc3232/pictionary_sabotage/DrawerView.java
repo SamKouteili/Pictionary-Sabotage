@@ -51,7 +51,6 @@ public class DrawerView extends View {
 
     private void init(){
         this.setBackgroundColor(Color.WHITE);
-
         brush_size = 8f;
         draw_path = new Path();
         canvas_paint = new Paint(Paint.DITHER_FLAG);
@@ -63,6 +62,7 @@ public class DrawerView extends View {
         brush.setStyle(Paint.Style.STROKE);
         brush.setStrokeJoin(Paint.Join.ROUND);
         brush.setStrokeCap(Paint.Cap.ROUND);
+        can_draw = false;
 
         can_draw = true;
 
@@ -138,6 +138,7 @@ public class DrawerView extends View {
         brush.setColor(paint_color);
         brush_size = 25f;
         brush.setStrokeWidth(brush_size);
+
     }
     public void DrawingMode(){
         paint_color = Color.BLACK;
