@@ -37,7 +37,7 @@ public class GuesserActivity extends AppCompatActivity {
     EditText input_text;
     private DrawerView guesser_view;
 
-    private long timeLeftToDraw = 20000; // 20 seconds
+    private long timeLeftToDraw = 30000; // 30 seconds
     private CountDownTimer countDownTimer;
     private TextView countdownText;
 
@@ -49,15 +49,16 @@ public class GuesserActivity extends AppCompatActivity {
 
         Log.d("Classes", curUsr + " is in GuesserActivity");
 
-        input_text = findViewById(R.id.GuesserInput);
-        guesser_view = (DrawerView) findViewById(R.id.drawer_view);
-        countdownText = findViewById(R.id.countDown_draw);
-
         // Set room Id
         Bundle bundle = getIntent().getExtras();
         expected_text = bundle.getString("round word");
         roomID = bundle.getString("roomID");
         cur_round = bundle.getInt("round num");
+
+        input_text = findViewById(R.id.GuesserInput);
+        guesser_view = (DrawerView) findViewById(R.id.drawer_view);
+        guesser_view.setCanvas_db(roomID);
+        countdownText = findViewById(R.id.countDown_draw);
 
         room_database.addValueEventListener(new ValueEventListener() {
             @Override

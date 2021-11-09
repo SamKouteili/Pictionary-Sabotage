@@ -36,14 +36,14 @@ public class SaboteurActivity extends AppCompatActivity {
     private DrawerView saboteur_view;
 
 
-    private long timeLeftToDraw = 20000; // 20 seconds
+    private long timeLeftToDraw = 30000; // 30 seconds
     private CountDownTimer countDownTimer;
     private TextView countdownText;
 
     private CountDownTimer sabotageTimer;
     private CountDownTimer waitTimer;
     private final long waitTime = 5000;
-    private final long sabotageTime = 3000;
+    private final long sabotageTime = 5000;
     private boolean can_sabotage;
     private boolean has_sabotaged;
     private final String go = "GO!";
@@ -57,17 +57,18 @@ public class SaboteurActivity extends AppCompatActivity {
 
         Log.d("TAGGG", getCurrentUser() + " is in SaboteurActivity");
 
-        saboteur_view = (DrawerView) findViewById(R.id.saboteur_view);
-        saboteur_view.EraserMode();
-        countdownText = findViewById(R.id.countDown_draw);
-        can_sabotage = false;
-        has_sabotaged = false;
-        saboteur_button = (Button) findViewById(R.id.sabotage_button);
-
         // Set room Id
         Bundle bundle = getIntent().getExtras();
         roomID = bundle.getString("roomID");
         cur_round = bundle.getInt("round num");
+
+        saboteur_view = (DrawerView) findViewById(R.id.saboteur_view);
+        saboteur_view.setCanvas_db(roomID);
+        saboteur_view.eraserMode();
+        countdownText = findViewById(R.id.countDown_draw);
+        can_sabotage = false;
+        has_sabotaged = false;
+        saboteur_button = (Button) findViewById(R.id.sabotage_button);
 
         room_database.addValueEventListener(new ValueEventListener() {
             @Override

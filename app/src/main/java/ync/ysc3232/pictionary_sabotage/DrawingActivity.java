@@ -38,7 +38,7 @@ public class DrawingActivity extends AppCompatActivity {
     private Toolbar bottom_toolbar;
     private DrawerView drawer_view;
 
-    private long timeLeftToDraw = 20000; // 20 seconds
+    private long timeLeftToDraw = 30000; // 30 seconds
     private CountDownTimer countDownTimer;
     private TextView countdownText;
 
@@ -47,10 +47,15 @@ public class DrawingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawing);
 
-
         Log.d("TAGGG", getCurrentUser() + " is in DrawingActivity");
 
+        // Set room Id
+        Bundle bundle = getIntent().getExtras();
+        roomID = bundle.getString("roomID");
+        cur_round = bundle.getInt("round num");
+
         drawer_view = (DrawerView)findViewById(R.id.drawer_view);
+        drawer_view.setCanvas_db(roomID);
         drawer_view.setCanDraw(true);
         countdownText = findViewById(R.id.countDown_draw);
 
@@ -63,11 +68,6 @@ public class DrawingActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-        // Set room Id
-        Bundle bundle = getIntent().getExtras();
-        roomID = bundle.getString("roomID");
-        cur_round = bundle.getInt("round num");
 
         room_database.addValueEventListener(new ValueEventListener() {
             @Override
@@ -110,10 +110,10 @@ public class DrawingActivity extends AppCompatActivity {
     private void handleDrawingIconTouched(int itemId){
         switch (itemId){
             case R.id.action_erase:
-                drawer_view.EraserMode();
+                drawer_view.eraserMode();
                 break;
             case R.id.action_brush:
-                drawer_view.DrawingMode();
+                drawer_view.drawingMode();
                 break;
         }
     }
