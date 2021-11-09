@@ -80,7 +80,7 @@ public class SaboteurActivity extends AppCompatActivity {
                         Log.d("TAGGG", "CountDownTimer cancel");
                         countDownTimer.cancel();
                     }
-                    if (cur_round < 4){
+                    if (cur_round < 3){
                         Intent intent = new Intent(SaboteurActivity.this, RandomWordGenerator.class);
                         intent.putExtra("roomID", roomID);
                         startActivity(intent);

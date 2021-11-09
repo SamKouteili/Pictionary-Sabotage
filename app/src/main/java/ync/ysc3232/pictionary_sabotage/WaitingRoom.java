@@ -39,6 +39,7 @@ public class WaitingRoom extends AppCompatActivity {
 
     RoomData roomData;
     String roomId;
+    boolean createdIntent;
     //Access rooms database
     DatabaseReference rooms_database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
             .getReference().child("Rooms");
@@ -71,6 +72,9 @@ public class WaitingRoom extends AppCompatActivity {
             spinner.setAdapter(adapter);
             spinner.setEnabled(false);
         }
+
+        //Have not created intent for next room
+        createdIntent = false;
 
         //Set room Id
         Bundle bundle = getIntent().getExtras();
@@ -107,21 +111,24 @@ public class WaitingRoom extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 roomData = snapshot.getValue(RoomData.class);
+                Log.d("TAGGG", "WaitingRoom OnDataChange with " + roomId + " and roundNum " + roomData.getRoundNum());
 
-                //Testing
-                Bundle bundle = getIntent().getExtras();
-                roomId = bundle.getString("roomId");
-                Log.d("TAGGG", "WaitingRoom has bundle with roomId " + roomId);
-
+                if (roomData.getRoundNum() != 0) {
+                    Log.d("TAGGG", "WaitingRoom OnDataChange roomId is NOT 0 - return");
+                    return;
+                }
 
                 //If the data update says game has started - move to next page
                 if (roomData.isGameStarted()) {
-                    Log.d("TAGGG", "Game Started for " + roomId);
-                    Intent intent = new Intent(WaitingRoom.this, RandomWordGenerator.class);
-                    intent.putExtra("roomID", roomId);
-                    startActivity(intent);
-//                    finish();
+                    if (!createdIntent) {
+                        Log.d("TAGGG", "Game Started for " + roomId);
+                        Intent intent = new Intent(WaitingRoom.this, RandomWordGenerator.class);
+                        intent.putExtra("roomID", roomId);
+                        createdIntent = true;
+                        startActivity(intent);
+                    }
                 } else {
+                    Log.d("TAGGG", "Game NOT Started for " + roomId);
                     int i = 0;
                     roomData = snapshot.getValue(RoomData.class);
                     for (DataSnapshot playerSnapShot : snapshot.child("players").getChildren()) {

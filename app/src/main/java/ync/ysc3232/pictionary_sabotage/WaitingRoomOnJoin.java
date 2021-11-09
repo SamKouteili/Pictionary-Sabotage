@@ -27,6 +27,7 @@ public class WaitingRoomOnJoin extends AppCompatActivity {
 
     RoomData roomData;
     String roomId;
+    boolean createdIntent;
     //Access rooms database
     DatabaseReference rooms_database = FirebaseDatabase.getInstance("https://pictionary-sabotage-default-rtdb.asia-southeast1.firebasedatabase.app")
             .getReference().child("Rooms");
@@ -60,23 +61,35 @@ public class WaitingRoomOnJoin extends AppCompatActivity {
         //Disbale StartGame Button
         startGame.setEnabled(false);
 
+        //Have not created intent
+        createdIntent = false;
+
         //Get room data and players to set the Text on screen
         rooms_database.child(roomId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 roomData = snapshot.getValue(RoomData.class);
+                Log.d("TAGGG", "WaitingRoomOnJoin OnDataChange with " + roomId + " and roundNum " + roomData.getRoundNum());
+
+                if (roomData.getRoundNum() != 0) {
+                    Log.d("TAGGG", "WaitingRoomOnJoin OnDataChange roomId is NOT 0 - return");
+                    return;
+                }
 
                 //If the data update says game has started - move to next page
                 if (roomData.isGameStarted()) {
-                    Log.d("TAGG", "Game Started for " + roomId);
-                    Intent intent = new Intent(WaitingRoomOnJoin.this, RandomWordGenerator.class);
-                    intent.putExtra("roomID", roomId);
-                    startActivity(intent);
+                    if (!createdIntent) {
+                        Log.d("TAGGG", "WaitingRoomOnJoin Game Started for " + roomId);
+                        Intent intent = new Intent(WaitingRoomOnJoin.this, RandomWordGenerator.class);
+                        intent.putExtra("roomID", roomId);
+                        createdIntent = true;
+                        startActivity(intent);
+                    }
                 } else {
                     int i = 0;
                     roomData = snapshot.getValue(RoomData.class);
                     for (DataSnapshot playerSnapShot : snapshot.child("players").getChildren()) {
-                        Log.d("TAGG", "Players include " + playerSnapShot.getKey());
+                        Log.d("TAGGG", "WaitingRoomOnJoin Players include " + playerSnapShot.getKey());
                         playersText[i].setText(playerSnapShot.getKey());
                         playersRoleText[i].setText(playerSnapShot.getValue().toString());
                         playersRoleText[i].setVisibility(View.VISIBLE);

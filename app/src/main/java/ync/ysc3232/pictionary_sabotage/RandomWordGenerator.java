@@ -69,7 +69,7 @@ public class RandomWordGenerator extends AppCompatActivity {
                 } else {
                     roomData = task.getResult().child(roomId).getValue(RoomData.class);
                     int round = roomData.getRoundNum();
-                    if (round < 5) {
+                    if (round < 4) {
                         randomWordString = roomData.fiveWords.get(round);
                         if (roomData.players.get(getCurrentUser()).equals("Guesser")) {
                             randomWord.setText(R.string.guesserText);
@@ -137,6 +137,7 @@ public class RandomWordGenerator extends AppCompatActivity {
         Intent i;
         switch (role){
             case "Guesser" :
+                Log.d("TAGGG", "RandomWordGenerator creates intent for Guesser");
                 i = new Intent(RandomWordGenerator.this, GuesserActivity.class);
                 return i;
             case "Saboteur" :
