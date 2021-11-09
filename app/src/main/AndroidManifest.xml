@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PictionarySabotage"
         android:usesCleartextTraffic="true">
+        <uses-library android:name="android.test.runner"
+            android:required="false" />
+        <uses-library android:name="android.test.base"
+            android:required="false" />
+        <uses-library android:name="android.test.mock"
+            android:required="false" />
         <activity
             android:name=".WaitingRoomOnJoin"
             android:exported="true" />

@@ -84,6 +84,40 @@ public class RandomWordGenerator extends AppCompatActivity {
                         }
                     }
                 }
+//<<<<<<< HEAD
+//                else {
+//                    num_of_words = Integer.parseInt(String.valueOf(task.getResult().getValue()));
+//                }
+//            }
+//        });
+//
+//        //Generate random number
+//        int x = (int)(Math.random() * words.length);
+//
+//        // Read from the database
+//        rw_database.child(String.valueOf(x)).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                randomWord.setText(snapshot.getValue().toString());
+//
+//                //Only start time when word is generated
+//                startTimer();
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                Log.e("firebase", "Data not retrieved");
+//            }
+//        });
+//
+//        finish = findViewById(R.id.finish);
+//        finish.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                stopTimer();
+//                Intent intent = new Intent(RandomWordGenerator.this, PodiumActivity.class);
+//                startActivity(intent);
+//=======
+//>>>>>>> main
             }
         });
     }

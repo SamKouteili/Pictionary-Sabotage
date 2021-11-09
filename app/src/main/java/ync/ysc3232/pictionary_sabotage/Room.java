@@ -135,9 +135,15 @@ public class Room extends AppCompatActivity {
                         }
 
                         roomData.addPlayer(getCurrentUser(), "Undecided");
+//<<<<<<< HEAD
+//                        room_database.child(roomId).setValue(roomData);
+//
+//                        Intent intent = new Intent(Room.this, WaitingRoom.class);
+//=======
                         database.child("Rooms").child(roomId).setValue(roomData);
 
                         Intent intent = new Intent(Room.this, WaitingRoomOnJoin.class);
+//>>>>>>> main
                         intent.putExtra("roomId", roomId);
                         startActivity(intent);
                     }
